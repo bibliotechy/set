@@ -21,7 +21,19 @@ class Checker{
         return true
     }
 
-    static any_sets(board: Board): Boolean {
+    static any_sets(cards: Card[]): Boolean {
+        if (cards.length < 3) {
+            throw(RangeError("Not enough cards to check for a set"))
+        }
+        for(let first = 0; cards.length -2 > first; first++) {
+            for (let second = first + 1; cards.length -1 > second; second++ ){
+                for (let third = second + 1; cards.length > third; third++) {
+                    if (Checker.is_set([cards[first], cards[second], cards[third]])) {
+                        return true
+                    }
+                }
+            }
+        }
         return false
     }
 }
