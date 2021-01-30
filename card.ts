@@ -40,7 +40,7 @@ interface CardParameters {
 }
 
 
-const randomEnum = (enumeration) => {
+const randomEnum = (enumeration: any) => {
     const values = Object.keys(enumeration);
     const enumKey = values[Math.floor(Math.random() * values.length)];
     return enumeration[enumKey];

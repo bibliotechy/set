@@ -10,7 +10,7 @@ class Stack {
                 Object.keys(Count).forEach(count => {
                     Object.keys(Fill).forEach(fill => {
                         if (this.cards.length < stack_size) {
-                            let card = new Card({color: Color[color], shape: Shape[shape], count: Count[count], fill: Fill[fill]})
+                            let card = new Card({color: Color[color as keyof typeof Color], shape: Shape[shape as keyof typeof Shape], count: Count[count as keyof typeof Count], fill: Fill[fill as keyof typeof Fill]})
                             this.cards.push(card)
                         }
                     })
@@ -36,12 +36,17 @@ class Stack {
 
     take(n: number = 3): Card[] {
         if (n <= this.cards_left()){
-            let cards = [];
-            [...Array(n)].forEach(i =>{
+            let cards: Card[] = [];
+            [...Array(n)].forEach(_ =>{
                 cards.push(this.take_one())
             })
-    
-            return cards
+            if (cards.length > 0) {
+                return cards
+            }
+            else {
+                throw new RangeError("Not enough cards left in the stack to take.")
+            }
+
         }
         else {
             // Do I want to return an error here? Or an empty array?

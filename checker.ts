@@ -1,5 +1,4 @@
 import { Card } from "./card"
-import { Board } from "./board"
 import { Color, Shape, Count, Fill } from "./attributes"
 
 class Checker{
