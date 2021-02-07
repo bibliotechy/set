@@ -1,5 +1,5 @@
-import { Card } from "./card"
-import { Stack } from "./stack"
+import { Card } from "./card.js"
+import { Stack } from "./stack.js"
 
 class Board{
     in_play: Set<Card> = new Set();

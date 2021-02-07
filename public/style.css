@@ -1,0 +1,134 @@
+body {
+    font-family: "Arial", sans-serif;
+}
+section {
+    text-align: center;
+}
+
+#game-info {
+    float: left; 
+    width: 20%;
+}
+
+.game--container {
+    display: grid;
+    width: 66%;
+    grid-template-columns: repeat(4, auto);
+    margin: auto;
+    row-gap: 10%;
+    column-gap: 5%;
+}
+.cell {
+    min-width: 100%;
+    min-height: 100%;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    font-size: 10px;
+    margin-left: 15px;
+}
+
+
+
+.card {
+    width: 165px;
+    min-height: 110px;
+    border-radius: 20px;
+    box-shadow: 3px 2px grey;
+    border: 1px solid grey;
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    justify-content: center;
+    align-content: center;
+    transition: ease-out 1s;
+}
+
+.card.selected {
+    box-shadow: 6px 4px 6px 4px black;
+    border-color: #456789;
+
+}
+
+
+
+.Red {
+    background-color: red;
+    border: 3px solid red;
+}
+
+.Green {
+    background-color: green;
+    border: 3px solid green;
+}
+
+.Purple {
+    background-color: purple;
+    border: 3px solid purple;
+}
+
+.Red.Shaded {
+    background: repeating-linear-gradient(
+  90deg,
+  red 1px,white 5px);
+}
+
+.Purple.Shaded {
+    background: repeating-linear-gradient(
+  90deg,
+  purple 1px,white 5px);
+}
+
+.Green.Shaded {
+    background: repeating-linear-gradient(
+  90deg,
+  green 1px,white 5px)
+}
+
+
+.Red.Shaded.Diamond {
+    background: repeating-linear-gradient(
+  45deg,red 1px,white 6px);
+}
+
+.Purple.Shaded.Diamond {
+    background: repeating-linear-gradient( 
+        45deg, purple 1px, white 6px);
+}
+
+.Green.Shaded.Diamond {
+    background: repeating-linear-gradient(
+  45deg,green 1px,white 6px);
+}
+
+.shape {
+    width: 25px;
+    margin: 5px;
+}
+
+.Pill {
+    border-radius: 25px;
+    height: 64px;
+}
+
+.Diamond {
+    width: 35px;
+    height: 35px;
+    transform: rotate(45deg) skew(20deg, 20deg);
+    -webkit-transform: rotate(45deg) skew(20deg, 20deg);
+    /* clip-path: polygon(50% 0%, 80% 50%, 50% 100%, 20% 50%); */
+}
+
+.Squiggle {
+    height: 64px;
+}
+
+.Empty {
+    background-color: white;
+}
+
+.hidden {
+    transform: scale(0);
+}
+
+

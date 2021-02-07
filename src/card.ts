@@ -1,4 +1,4 @@
-import { Shape, Color, Count, Fill} from  "./attributes"
+import { Shape, Color, Count, Fill} from  "./attributes.js"
 
 class Card {
     shape: Shape;

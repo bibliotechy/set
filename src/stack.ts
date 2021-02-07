@@ -1,5 +1,5 @@
-import { Card } from "./card"
-import { Color, Shape, Count, Fill } from "./attributes"
+import { Card } from "./card.js"
+import { Color, Shape, Count, Fill } from "./attributes.js"
 
 
 class Stack {
