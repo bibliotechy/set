@@ -157,7 +157,159 @@ class Checker{
     }
 }
 
-const emptyCells = function(): NodeList {
+
+// Keyboard Nav
+//------------//
+function keyboardInput(event: KeyboardEvent) {
+    let currentEl = document.activeElement
+    if (!currentEl.classList.contains("card")){
+        focusOnFirstCard()
+        currentEl = document.activeElement
+    }
+
+    let currentCardIndex: number = +currentEl.getAttribute("position")
+
+    // PRESS LEFT ARROW
+    if (event.keyCode == 37) {
+       if (currentCardIndex != 1) {
+            let newIndex: string = "" + (currentCardIndex - 1);
+            window.setTimeout( function() {
+              (document.querySelector("[position='" + newIndex +"']") as HTMLElement).focus()}, 
+              0);
+       }
+    }
+    // PRESS UP ARROW
+    else if (event.keyCode == 38) {
+        if (currentCardIndex > 4) {
+            let newIndex: string = "" + (currentCardIndex - 4);
+            window.setTimeout( function() {
+               (document.querySelector("[position='" + newIndex +"']") as HTMLElement).focus()}, 
+               0);
+        }
+     }
+
+    // PRESS RIGHT ARROW
+    else if (event.keyCode == 39) {
+        if (currentCardIndex < lastCardIndex() ) {
+            let newIndex: string = "" + (currentCardIndex + 1);
+            window.setTimeout( function() {
+              (document.querySelector("[position='" + newIndex +"']") as HTMLElement).focus()}, 
+              0);
+       }
+    }
+    // PRESS DOWN ARROW
+    else if (event.keyCode == 40) {
+        if (currentCardIndex < lastCardIndex() -3) {
+            let newIndex: string = "" + (currentCardIndex + 4);
+            window.setTimeout( function() {
+               (document.querySelector("[position='" + newIndex +"']") as HTMLElement).focus()}, 
+               0);
+        }
+    }
+ }
+
+
+ // Board Setup
+ //------------//
+
+ const fillSpots = function(stack: Stack, board: Array<Card>): void {
+    document.querySelector("#yep-nope").innerHTML = ""
+    let currentEmptyCells = allEmptyCells()
+    if (currentEmptyCells.length < stack.cards_left()) {
+        currentEmptyCells.forEach( function(cell) {
+            let card = stack.take_one()
+            addCardToCell(cell as HTMLElement, card)
+            let el = cell as HTMLElement
+            let index = el.getAttribute("data-cell-index")
+            board[index] = card;
+        })
+
+        setCardsLeft();
+        focusOnFirstCard() 
+    }
+}
+
+let squiggleSvg = `
+<svg class="shape" viewBox="-2 -2 54 104">
+<path d="M39.4,63.4c0,16.1,11,19.9,10.6,28.3c-0.5,8.2-21.1,12.2-33.4,3.8s-15.8-21.2-9.3-38c3.7-7.5,4.9-14,4.8-20 c0-16.1-11-19.9-10.6-27.3C1,0.1,21.6-3,33.9,6.5s15.8,21.2,9.3,38C40.4,50.6,38.5,57.4,38.4,63.4z">
+</path>
+</svg>
+`
+
+let pillSvg = `
+<svg class="shape" viewBox="-2 -2 54 104">
+<path d="M25,99.5C14.2,99.5,5.5,90.8,5.5,80V20C5.5,9.2,14.2,0.5,25,0.5S44.5,9.2,44.5,20v60 C44.5,90.8,35.8,99.5,25,99.5z">
+</path>
+</svg>
+`
+
+let diamondSvg = `
+<svg class="shape" viewBox="-2 -2 54 104">
+<path d="M24 0 L48 48 L24 96 L0 48 Z">
+</path>
+</svg>
+`
+ 
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+
+
+const shapeSVG = function(shape: Shape): string {
+    switch(shape) {
+        case Shape.Squiggle:
+            console.log(shape)
+            return squiggleSvg
+        case Shape.Diamond: 
+            return diamondSvg
+        case Shape.Pill: 
+            return pillSvg
+    }
+}
+
+
+const throwShade = function(color: Color, shape: HTMLElement) {
+    shape.querySelector("path").setAttributeNS(null, "fill", "url('#shaded-" + color + "')")
+}
+
+const drawCard = function(card: Card, position: string): HTMLElement {
+
+    let spot: number = +position;
+
+    let cardButton = document.createElement("button")
+    cardButton.classList.add("card")
+    cardButton.classList.add("hidden")
+    cardButton.setAttribute("tabindex", "0")
+    cardButton.setAttribute("position", ""+(spot + 1))
+    cardButton.setAttribute("role", "button")
+    for (let i =  0; i < count_to_num(card.count); i++) {
+        cardButton.innerHTML += shapeSVG(card.shape)
+    }
+    let shapes = cardButton.querySelectorAll(".shape")
+    shapes.forEach( shape => {
+        shape.classList.add("shape")
+        shape.classList.add(card.shape)
+        shape.classList.add(card.color)
+        shape.classList.add(card.fill)
+        if (card.fill == Fill.Shaded) {
+            throwShade(card.color, shape as HTMLElement)
+        }})
+
+    return cardButton
+}
+
+const addCardToCell = function(cell: HTMLElement, card: Card): void {
+    let position = cell.getAttribute("data-cell-index")
+    let cardElement = drawCard(card, position)
+    cell.appendChild(cardElement)
+    cardElement.classList.remove("hidden")
+    cell.classList.remove("empty")
+
+}
+
+
+// Utils
+//---------//
+const allEmptyCells = function(): NodeList {
     return document.querySelectorAll('.cell.empty')
 }
 
@@ -165,26 +317,6 @@ const selectedCards = function(): NodeList {
     return document.querySelectorAll(".card.selected")
 }
 
-const drawCard = function(card: Card): HTMLElement {
-
-    let div = document.createElement("div")
-    div.classList.add("card")
-    div.classList.add("hidden")
-    for (const _ in Array(count_to_num(card.count)).fill("")) {
-        let shape = document.createElement("div")
-        shape.classList.add("shape")
-        shape.classList.add(card.shape)
-        shape.classList.add(card.color)
-        shape.classList.add(card.fill)
-        shape.setAttribute("fill", card.fill)
-        div.appendChild(shape)
-        let inner = document.createElement('div')
-        inner.classList.add("inner")
-        shape.appendChild(inner)
-    }
-
-    return div
-}
 
 const incrementSetsFound = function() {
     sets_found += 1;
@@ -192,7 +324,7 @@ const incrementSetsFound = function() {
 }
 
 
-const count_to_num = function(c: Count){
+const count_to_num = function(c: Count): number{
     switch (c) {
         case "One":
             return 1
@@ -205,26 +337,13 @@ const count_to_num = function(c: Count){
 
 
 
-const addCardToCell = function(cell: HTMLElement, card: Card): void {
-    let cardElement = drawCard(card)
-    cell.appendChild(cardElement)
-    cardElement.classList.remove("hidden")
-    cell.classList.remove("empty")
-
+const focusOnFirstCard = function() {
+    (document.querySelector("[position='1']") as HTMLElement).focus();
 }
 
-const fillSpots = function(stack: Stack, board: Array<Card>): void {
-    document.querySelector("#yep-nope").innerHTML = ""
-    let currentEmptyCells = emptyCells()
-    if (currentEmptyCells.length < stack.cards_left()) {
-        currentEmptyCells.forEach( function(cell) {
-            let card = stack.take_one()
-            addCardToCell(cell as HTMLElement, card)
-            let el = cell as HTMLElement
-            let index = el.getAttribute("data-cell-index")
-            board[index] = card;
-        })
-    }
+const lastCardIndex = function(): number {
+    let allCards = document.querySelectorAll(".card")
+    return +(allCards[allCards.length -1] as HTMLElement).getAttribute("position")
 }
 
 const removeAllCards = function(): void {
@@ -253,10 +372,17 @@ const handleCheckForAnySets = function(){
 }
 
 
-const handleCellClick = function(event: MouseEvent) {
+const setCardsLeft = function(): void {
+    document.querySelector("#cards-left").innerHTML = ""+stack.cards_left() + " "
+}
+
+
+// Main Game Logic here
+//----------------------//
+const handleCellClick = function(event: MouseEvent | KeyboardEvent) {
     // Shoudl handle stopping at three
     let cell = event.target as HTMLElement;
-    if (cell.className.includes("shape")) {
+    if (cell.classList.contains("shape")) {
         cell =  cell.parentElement
     }
     if (cell.classList.contains("selected")) {
@@ -264,17 +390,17 @@ const handleCellClick = function(event: MouseEvent) {
     }
     else {
         cell.classList.add("selected")
-        let c: Array<Card> = []
-        setTimeout(() => selectedCards().forEach(cardElement => 
+        let c: Card[] = []
+        selectedCards().forEach(cardElement => 
             c.push(board[(cardElement as HTMLElement).parentElement.getAttribute("data-cell-index")] as Card)          
-        ), 1000)
-        
+        )
         
         if (selectedCards().length == 3) {
             if (Checker.is_set(c)) {
                 console.log("Yay you found a set")
                 selectedCards().forEach( cardElement => {
-                    (cardElement as HTMLElement).style.transform = "scale(0)"
+                    (cardElement as HTMLElement).style.transform = "scale(1.5)";
+                    (cardElement as HTMLElement).style.transform = "scale(0)";
                     cardElement.parentElement.classList.add("empty")
                     setTimeout(() => cardElement.parentElement.removeChild(cardElement), 1000)
                     
@@ -283,18 +409,18 @@ const handleCellClick = function(event: MouseEvent) {
                 setTimeout(() => fillSpots(stack, board), 1000)
             }
             else {
-                console.log("nope");
+                selectedCards().forEach( cardElement => (cardElement as HTMLElement).classList.add("shake") )
+                selectedCards().forEach( cardElement => setTimeout(() => (cardElement as HTMLElement).classList.remove("shake"), 500))
                 selectedCards().forEach( cardElement => (cardElement as HTMLElement).classList.remove("selected") )
             }
         }
     }
 }
 
+
 let stack: Stack;
 let board: Array<Card>;
 let sets_found: number;
-
-
 
 
 
@@ -305,8 +431,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
     console.log("Trying to fill the stack!")
     fillSpots(stack, board);
     
-    document.querySelectorAll('.cell').forEach(cell => cell.addEventListener('click', handleCellClick));
+    document.querySelectorAll('.cell').forEach(cell => {
+        cell.addEventListener('click', handleCellClick);
+    })
 
+    document.addEventListener('keydown', keyboardInput);
+
+
+        
   })
 
 
@@ -314,3 +446,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 document.querySelector('.game--restart').addEventListener('click', handleRestartGame);
 document.querySelector('#check-for-sets').addEventListener('click', handleCheckForAnySets);
+// document.querySelector('#add-row').addEventListener('click', handleAddRow);

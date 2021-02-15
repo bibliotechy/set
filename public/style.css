@@ -1,5 +1,6 @@
 body {
     font-family: "Arial", sans-serif;
+    background-color: #F9F4EC;
 }
 section {
     text-align: center;
@@ -10,14 +11,31 @@ section {
     width: 20%;
 }
 
+#board {
+    float: left;
+    width: 80%;
+}
+
 .game--container {
     display: grid;
-    width: 66%;
+    width: 90%;
     grid-template-columns: repeat(4, auto);
     margin: auto;
-    row-gap: 10%;
+    row-gap: 30px;
     column-gap: 5%;
 }
+
+
+.extra-row {
+    display: none;
+    width: 90%;
+    grid-template-columns: repeat(3, auto);
+    margin: 30px auto;
+    row-gap: 10%;
+    column-gap: 15%;
+  }
+
+
 .cell {
     min-width: 100%;
     min-height: 100%;
@@ -31,7 +49,7 @@ section {
 
 
 .card {
-    width: 165px;
+    width: 175px;
     min-height: 110px;
     border-radius: 20px;
     box-shadow: 3px 2px grey;
@@ -41,94 +59,112 @@ section {
     margin: auto;
     justify-content: center;
     align-content: center;
-    transition: ease-out 1s;
+    transition: ease-out .5s;
+    background-color: white;
+}
+ 
+.card:focus {
+    box-shadow: 6px 4px 6px 4px #999;
+    border-color: #999;
 }
 
 .card.selected {
-    box-shadow: 6px 4px 6px 4px black;
-    border-color: #456789;
-
+    box-shadow: 6px 4px 6px 4px #000;
+    border-color: #000;
 }
 
-
-
-.Red {
-    background-color: red;
-    border: 3px solid red;
+.card-vertical {
+    width: 110px;
+    height: 165px;
+    border-radius: 20px;
+    box-shadow: 3px 2px grey;
+    border: 1px solid grey;
+    background-color: white;
+    margin: auto;
 }
 
-.Green {
-    background-color: green;
-    border: 3px solid green;
+.cards-left {
+    line-height: 50px;
+    font-size: xx-large;
 }
+
+.controls {
+    font-size: 12px;;
+}
+
 
 .Purple {
-    background-color: purple;
-    border: 3px solid purple;
+    border: none;
+    stroke: #601a4a;
+    stroke-width: 5px;
 }
 
-.Red.Shaded {
-    background: repeating-linear-gradient(
-  90deg,
-  red 1px,white 5px);
+.Purple.Solid {
+    fill: #601a4a;
 }
 
-.Purple.Shaded {
-    background: repeating-linear-gradient(
-  90deg,
-  purple 1px,white 5px);
+.game--container.mono .Purple {
+    stroke-dasharray: 2,2;
 }
 
-.Green.Shaded {
-    background: repeating-linear-gradient(
-  90deg,
-  green 1px,white 5px)
+.Red {
+    border: none;
+    stroke: #EE442F;
+    stroke-width: 5px;
+}
+
+.Red.Solid {
+    fill: #EE442F;
+}
+
+.game--container.mono .Red {
+    stroke-dasharray: 12,12;
 }
 
 
-.Red.Shaded.Diamond {
-    background: repeating-linear-gradient(
-  45deg,red 1px,white 6px);
+.Green {
+    border: none;
+    stroke: #63ACBE;
+    stroke-width: 5px;
 }
 
-.Purple.Shaded.Diamond {
-    background: repeating-linear-gradient( 
-        45deg, purple 1px, white 6px);
-}
-
-.Green.Shaded.Diamond {
-    background: repeating-linear-gradient(
-  45deg,green 1px,white 6px);
+.Green.Solid {
+    fill: #63ACBE;
 }
 
 .shape {
-    width: 25px;
+    width: 35px;
+    height: 70px;
     margin: 5px;
 }
 
-.Pill {
-    border-radius: 25px;
-    height: 64px;
-}
-
-.Diamond {
-    width: 35px;
-    height: 35px;
-    transform: rotate(45deg) skew(20deg, 20deg);
-    -webkit-transform: rotate(45deg) skew(20deg, 20deg);
-    /* clip-path: polygon(50% 0%, 80% 50%, 50% 100%, 20% 50%); */
-}
-
-.Squiggle {
-    height: 64px;
-}
 
 .Empty {
-    background-color: white;
+    fill: white;
 }
 
 .hidden {
     transform: scale(0);
 }
+
+
+.shake {
+    animation: shake 0.5s;
+    border-color: whitesmoke;
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
 
 
