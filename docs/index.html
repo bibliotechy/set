@@ -9,33 +9,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 class="game--title">Set</h1>
-    <section id="game-info" name="Game info and Controls">
+    <header class="header"><h1 class="title">Set</h1></header>
+    <nav id="game-info" name="Game info and Controls">
 
         <h2> Sets Found: <span id=sets-found>0</span></h2>
         <hr>
         <div class="card-vertical controls">
             <p><button class="game--restart">Restart Game</button></p>
-            <fieldset>  
-                <legend>Check if a Set is on the Board?</legend>
-                <input type="radio" id="set-on" name="set-check" value="on">
-                <label for="set-on">on</label>
-                <input type="radio" id="set-off" name="set-check" value="off" checked>
-                <label for="set-off">off</label>
-              </fieldset> 
+            <button id="check-for-sets" aria-pressed="false" aria-label="check for sets">Are there any Sets?</button>
             <div id="yep-nope"></div>
-            <fieldset>  
-                <legend>Color Blind Mode</legend>
-                <input type="radio" id="colorblind-on" name="colorblind" value="on">
-                <label for="colorblind-on">on</label>
-                <input type="radio" id="colorblind-off" name="colorblind" value="off" checked>
-                <label for="colorblind-off">off</label>
-              </fieldset> 
+                <button id="colorblind-toggle" name="colorblind-toggle">
+                    <span id="cbm-enabled">Enable </span><span id="cbm-disabled">Disable </span> Color Blind Mode
+                </button>
+                <button id="add-column" aria-pressed="false">Add 3 Cards</button>
         </div>
 
     <hr>
     <div class="card-vertical cards-left"><span id="cards-left"> </span> Cards Left</div>
-    </section>
+    </nav>
     <section id="board">
         <svg width="0" height="0">
             <!--  Define the patterns for the different fill colors  -->
@@ -63,11 +54,6 @@
             <div data-cell-index="9" class="cell empty"></div>
             <div data-cell-index="10" class="cell empty"></div>
             <div data-cell-index="11" class="cell empty"></div>
-        </div>
-        <div class="extra-row">
-            <!-- <div data-cell-index="12" class="cell empty"></div>
-            <div data-cell-index="13" class="cell empty"></div>
-            <div data-cell-index="14" class="cell empty"></div> -->
         </div>
     </section>
     <script src="index.js"></script>

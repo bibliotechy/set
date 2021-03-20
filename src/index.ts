@@ -180,8 +180,8 @@ function keyboardInput(event: KeyboardEvent) {
     }
     // PRESS UP ARROW
     else if (event.keyCode == 38) {
-        if (currentCardIndex > 4) {
-            let newIndex: string = "" + (currentCardIndex - 4);
+        if (currentCardIndex > (numberOfCards() / 3)) {
+            let newIndex: string = "" + (currentCardIndex - (numberOfCards() /3));
             window.setTimeout( function() {
                (document.querySelector("[position='" + newIndex +"']") as HTMLElement).focus()}, 
                0);
@@ -199,8 +199,8 @@ function keyboardInput(event: KeyboardEvent) {
     }
     // PRESS DOWN ARROW
     else if (event.keyCode == 40) {
-        if (currentCardIndex < lastCardIndex() -3) {
-            let newIndex: string = "" + (currentCardIndex + 4);
+        if (currentCardIndex < lastCardIndex() - (numberOfCards()/3 -1)) {
+            let newIndex: string = "" + (currentCardIndex + (numberOfCards()/3));
             window.setTimeout( function() {
                (document.querySelector("[position='" + newIndex +"']") as HTMLElement).focus()}, 
                0);
@@ -341,9 +341,16 @@ const focusOnFirstCard = function() {
     (document.querySelector("[position='1']") as HTMLElement).focus();
 }
 
+const allCards = function(): NodeList {
+    return document.querySelectorAll(".card")
+}
+
+const numberOfCards = function(): number {
+    return allCards().length
+}
+
 const lastCardIndex = function(): number {
-    let allCards = document.querySelectorAll(".card")
-    return +(allCards[allCards.length -1] as HTMLElement).getAttribute("position")
+    return +(allCards()[numberOfCards() -1] as HTMLElement).getAttribute("position")
 }
 
 const removeAllCards = function(): void {
@@ -352,6 +359,39 @@ const removeAllCards = function(): void {
         let cell = el.parentElement
         cell.classList.add("empty")
         cell.removeChild(el)
+    })
+}
+
+
+const pushCardsBack = function(): void {
+    let cellWithoutCard = document.querySelectorAll(".cell:empty")
+    for (let i = 12; i <= 14; i++) {
+        
+    }
+}
+
+const handleAddRow = function(): void{
+    let container = document.querySelector(".game--container")
+    container.classList.add("extra-column")
+    for ( let i = 12; i <= 14; i++) {
+        let d = document.createElement('div')
+        d.classList.add('cell','empty')
+        d.setAttribute('data-cell-index',''+i)
+        container.appendChild(d)
+    }
+    setTimeout(()=> fillSpots(stack, board), 700)
+    toggleMoreCardsButton();
+    addCellClickHandlers();
+    
+}
+
+const toggleMoreCardsButton = function(): void {
+    document.querySelector("#add-column").toggleAttribute("disabled")
+}
+
+const addCellClickHandlers = function(): void {
+    document.querySelectorAll('.cell').forEach(cell => {
+        cell.addEventListener('click', handleCellClick);
     })
 }
 
@@ -406,7 +446,12 @@ const handleCellClick = function(event: MouseEvent | KeyboardEvent) {
                     
                 })
                 incrementSetsFound()
-                setTimeout(() => fillSpots(stack, board), 1000)
+                if (numberOfCards() == 15) {
+                    pushCardsBack()
+                }
+                else {                
+                    setTimeout(() => fillSpots(stack, board), 1000)
+                }
             }
             else {
                 selectedCards().forEach( cardElement => (cardElement as HTMLElement).classList.add("shake") )
@@ -430,10 +475,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     sets_found = 0;
     console.log("Trying to fill the stack!")
     fillSpots(stack, board);
-    
-    document.querySelectorAll('.cell').forEach(cell => {
-        cell.addEventListener('click', handleCellClick);
-    })
+    addCellClickHandlers();
 
     document.addEventListener('keydown', keyboardInput);
 
@@ -446,4 +488,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 document.querySelector('.game--restart').addEventListener('click', handleRestartGame);
 document.querySelector('#check-for-sets').addEventListener('click', handleCheckForAnySets);
-// document.querySelector('#add-row').addEventListener('click', handleAddRow);
+document.querySelector('#add-column').addEventListener('click', handleAddRow);
