@@ -61,18 +61,20 @@ header {
 
 .card {
     width: 110px;
-min-height: 175px;
-border-radius: 20px;
-box-shadow: 3px 2px grey;
-border: 1px solid white;
-margin: auto;
-justify-content: center;
-align-content: center;
-transition: ease-out .5s;
-background-color: white;
-display: grid;
-grid-template-rows: 4em;
+    min-height: 175px;
+    max-height: 175px;
+    border-radius: 20px;
+    box-shadow: 3px 2px grey;
+    border: 1px solid white;
+    margin: auto;
+    justify-content: center;
+    align-content: center;
+    transition: ease-out .5s;
+    background-color: white;
+    display: flex;
+    flex-wrap: wrap;
 }
+
  
 .card:focus {
     box-shadow: 6px 4px 6px 4px #999;
@@ -144,7 +146,7 @@ grid-template-rows: 4em;
 }
 
 .shape {
-    width: 35px;
+    width: 50px;
     height: 70px;
     transform: rotate(90deg);
 }
@@ -183,3 +185,36 @@ grid-template-rows: 4em;
   }
 
 
+
+
+  @media (max-width: 768px) {
+
+    nav { 
+        display: none;
+    }
+
+    #board {
+        width: 90%;
+    }
+    .game--container {
+        width: 100%
+    }
+    .card {
+        width: 44px;
+        min-height: 68px;
+        border-radius: 10px;
+        box-shadow: 3px 2px grey;
+        border: 1px solid white;
+        margin: auto;
+        justify-content: center;
+        align-content: center;
+        transition: ease-out .5s;
+        background-color: white;
+
+    }
+
+    .shape {
+        width: 35px;
+        height: 35px;
+    }
+}
