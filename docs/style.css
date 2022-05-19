@@ -1,6 +1,6 @@
 body {
     font-family: "Arial", sans-serif;
-    background-color: #F9F4EC;
+    background-color: grey;
 }
 
 section {
@@ -9,7 +9,16 @@ section {
 
 header {
     border-bottom: 1px solid black;
+    display: flex;
+    justify-content: space-between;
 }
+
+header button {
+    background-color: transparent;
+    border: 0px;
+    font-size: larger;
+  }
+
 
 #game-info {
     float: left; 
@@ -33,7 +42,7 @@ header {
 
 .extra-column {
     grid-template-columns: repeat(5, auto);
-    column-gap: 5%;
+    column-gap: 10%;
 }
 
 
@@ -69,7 +78,7 @@ header {
     margin: auto;
     justify-content: center;
     align-content: center;
-    transition: ease-out .5s;
+    transition: ease-out .2s;
     background-color: white;
     display: flex;
     flex-wrap: wrap;
@@ -77,8 +86,9 @@ header {
 
  
 .card:focus {
-    box-shadow: 6px 4px 6px 4px #999;
-    border-color: #999;
+    transition: all .2;
+    box-shadow: 6px 4px 6px 4px #003c54;
+    border-color: #003c54;
 }
 
 .card.selected {
@@ -146,7 +156,7 @@ header {
 }
 
 .shape {
-    width: 50px;
+    width: 55px;
     height: 70px;
     transform: rotate(90deg);
 }
@@ -155,6 +165,11 @@ header {
 .Empty {
     fill: white;
 }
+
+.card.Three .shape {
+    margin-bottom: -12px;
+    margin-top: -12px;
+  }
 
 .hidden {
     transform: scale(0);
@@ -171,25 +186,83 @@ header {
 }
 
 @keyframes shake {
-    0% { transform: translate(1px, 1px) rotate(90deg); }
-    10% { transform: translate(-1px, -2px) rotate(89deg); }
-    20% { transform: translate(-3px, 0px) rotate(91deg); }
-    30% { transform: translate(3px, 2px) rotate(90deg); }
-    40% { transform: translate(1px, -1px) rotate(91deg); }
-    50% { transform: translate(-1px, 2px) rotate(89deg); }
-    60% { transform: translate(-3px, 1px) rotate(90deg); }
-    70% { transform: translate(3px, 1px) rotate(89deg); }
-    80% { transform: translate(-1px, -1px) rotate(91deg); }
-    90% { transform: translate(1px, 2px) rotate(90deg); }
-    100% { transform: translate(1px, -2px) rotate(89deg); }
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(-1deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
   }
 
+
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+  
+header nav li {
+    display: block;
+    float: left;
+    padding: 1rem;
+    position: relative;
+    text-decoration: none;
+    transition-duration: 0.5s;
+    border-radius: 15px;
+
+}
+    
+  
+header nav li:hover,
+header nav li:focus-within {
+    cursor: pointer;
+  }
+  
+
+header nav li:hover button,
+header nav li:focus-within button,
+header nav li:focus-within button {
+  color: red;
+}
+  
+header nav ul li ul {
+    background: white;
+    visibility: hidden;
+    opacity: 0;
+    min-width: 5rem;
+    position: absolute;
+    transition: all 0.5s ease;
+    margin-top: 1rem;
+    left: 0;
+    display: none;
+    z-index: 100;
+  }
+  
+header nav ul li:hover > ul,
+header nav ul li:focus-within > ul,
+header nav ul li ul:hover,
+header nav ul li ul:focus {
+    visibility: visible;
+    opacity: 1;
+    display: block
+  }
+  
+header nav ul li ul li {
+    clear: both;
+    width: 100%;
+  }
 
 
 
   @media (max-width: 768px) {
 
-    nav { 
+    #game-info { 
         display: none;
     }
 
@@ -200,8 +273,8 @@ header {
         width: 100%
     }
     .card {
-        width: 44px;
-        min-height: 68px;
+        width: 66px;
+        min-height: 110px;
         border-radius: 10px;
         box-shadow: 3px 2px grey;
         border: 1px solid white;
@@ -213,8 +286,77 @@ header {
 
     }
 
+    .extra-column {
+        grid-template-columns: repeat(3, auto);
+        column-gap: 10%;
+    }
+
+    .extra-column .card {
+        width: 56px;
+        min-height: 90px;
+    }
+
     .shape {
         width: 35px;
         height: 35px;
     }
+
+    .card.Three .shape {
+        margin-bottom: -5px;
+        margin-top: -5px;
+      }
 }
+
+
+
+
+/**
+ * 1. Make the dialog container, and its child overlay spread across
+ *    the entire window.
+ */
+ .dialog-container,
+ .dialog-overlay {
+   position: fixed; /* 1 */
+   top: 0; /* 1 */
+   right: 0; /* 1 */
+   bottom: 0; /* 1 */
+   left: 0; /* 1 */
+ }
+ 
+ /**
+  * 1. Make sure the dialog container and all its descendants sits on
+  *    top of the rest of the page.
+  * 2. Make the dialog container a flex container to easily center the
+  *    dialog.
+  */
+ .dialog-container {
+   z-index: 2; /* 1 */
+   display: flex; /* 2 */
+ }
+ 
+ /**
+  * 1. Make sure the dialog container and all its descendants are not
+  *    visible and not focusable when it is hidden.
+  */
+ .dialog-container[aria-hidden='true'] {
+   display: none; /* 1 */
+ }
+ 
+ /**
+  * 1. Make the overlay look like an overlay.
+  */
+ .dialog-overlay {
+   background-color: rgba(43, 46, 56, 0.9); /* 1 */
+ }
+ 
+ /**
+  * 1. Vertically and horizontally center the dialog in the page.
+  * 2. Make sure the dialog sits on top of the overlay.
+  * 3. Make sure the dialog has an opaque background.
+  */
+ .dialog-content {
+   margin: auto; /* 1 */
+   z-index: 2; /* 2 */
+   position: relative; /* 2 */
+   background-color: white; /* 3 */
+ }

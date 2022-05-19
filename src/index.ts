@@ -1,3 +1,5 @@
+import A11yDialog from 'a11y-dialog'
+
 enum Color { 
     Red    = "Red",
     Green  = "Green", 
@@ -162,10 +164,10 @@ class Checker{
 //------------//
 function keyboardInput(event: KeyboardEvent) {
     let currentEl = document.activeElement
-    if (!currentEl.classList.contains("card")){
-        focusOnFirstCard()
-        currentEl = document.activeElement
-    }
+    // if (!currentEl.classList.contains("card")){
+    //     focusOnFirstCard()
+    //     currentEl = document.activeElement
+    // }
 
     let currentCardIndex: number = +currentEl.getAttribute("position")
 
@@ -278,6 +280,7 @@ const drawCard = function(card: Card, position: string): HTMLElement {
     let cardButton = document.createElement("button")
     cardButton.classList.add("card")
     cardButton.classList.add("hidden")
+    cardButton.classList.add(card.count)
     cardButton.setAttribute("tabindex", "0")
     cardButton.setAttribute("position", ""+(spot + 1))
     cardButton.setAttribute("role", "button")
@@ -364,13 +367,25 @@ const removeAllCards = function(): void {
 
 
 const pushCardsBack = function(): void {
-    let cellWithoutCard = document.querySelectorAll(".cell:empty")
-    for (let i = 12; i <= 14; i++) {
-        
+    let extras = [12, 13, 14]
+        .map((n) => document.querySelector("[data-cell-index='" + n +  "']"))
+        .filter((node) => !(node.classList?.contains("empty")))
+        console.log(extras)
+    for (let i = 0; i < 12; i++) {
+        let node = document.querySelector("[data-cell-index='" + i+  "']")
+        if (node.classList?.contains("empty")) {
+            let last = extras.pop()
+            node.classList.remove("empty")
+            node.innerHTML = last.innerHTML
+            let card = node.querySelector("button.card")
+            card.setAttribute("position", String(i+1))
+            last.parentElement.removeChild(last)
+        }
     }
+    document.querySelector(".game--container").classList.remove("extra-column")
 }
 
-const handleAddRow = function(): void{
+const handleAddThreeCards = function(): void{
     let container = document.querySelector(".game--container")
     container.classList.add("extra-column")
     for ( let i = 12; i <= 14; i++) {
@@ -416,6 +431,27 @@ const setCardsLeft = function(): void {
     document.querySelector("#cards-left").innerHTML = ""+stack.cards_left() + " "
 }
 
+// Color change logic
+const handleColorChange = function(event : Event, color: string): void {
+    const currentElem = event.target as HTMLInputElement;
+    const hex = currentElem.value
+    var colorStyle = document.getElementById("colorStyle");
+    colorStyle.append("." + color +".Solid { fill: " + hex+ "} ." + color + "{stroke: "  + hex +  "}");
+    document.getElementById("shaded-"+ color +"-path").setAttribute("style","stroke:" + hex +"; stroke-width:1")
+}
+
+const handleRedColorChange = function(event: Event) {
+    handleColorChange(event, "Red")
+}
+
+const handleGreenColorChange = function(event: Event) {
+    handleColorChange(event, "Green")
+}
+
+const handlePurpleColorChange = function(event: Event) {
+    handleColorChange(event, "Purple")
+}
+
 
 // Main Game Logic here
 //----------------------//
@@ -442,12 +478,12 @@ const handleCellClick = function(event: MouseEvent | KeyboardEvent) {
                     (cardElement as HTMLElement).style.transform = "scale(1.5)";
                     (cardElement as HTMLElement).style.transform = "scale(0)";
                     cardElement.parentElement.classList.add("empty")
-                    setTimeout(() => cardElement.parentElement.removeChild(cardElement), 1000)
+                    setTimeout(() => cardElement.parentElement.removeChild(cardElement), 200)
                     
                 })
                 incrementSetsFound()
                 if (numberOfCards() == 15) {
-                    pushCardsBack()
+                    setTimeout(() => pushCardsBack(), 1000)
                 }
                 else {                
                     setTimeout(() => fillSpots(stack, board), 1000)
@@ -478,7 +514,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     addCellClickHandlers();
 
     document.addEventListener('keydown', keyboardInput);
-
+    
+    const dialog = new A11yDialog(document.getElementById('help-dialog'))
 
         
   })
@@ -488,4 +525,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 document.querySelector('.game--restart').addEventListener('click', handleRestartGame);
 document.querySelector('#check-for-sets').addEventListener('click', handleCheckForAnySets);
-document.querySelector('#add-column').addEventListener('click', handleAddRow);
+document.querySelector('#add-column').addEventListener('click', handleAddThreeCards);
+document.getElementById("red-color-selector").addEventListener("input", handleRedColorChange);
+document.getElementById("green-color-selector").addEventListener("input", handleGreenColorChange);
+document.getElementById("purple-color-selector").addEventListener("input", handlePurpleColorChange);

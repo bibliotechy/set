@@ -1,61 +1,159 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Set</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header class="header"><h1 class="title">Set</h1></header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>A11y Set</title>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/a11y-dialog@7/dist/a11y-dialog.min.js"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+    <style id="colorStyle"></style>
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="title" title="a11y set - an accessible set game">
+        a11<span class="tiny">y</span> set
+      </h1>
+      <nav role="navigation">
+        <ul>
+          <li>
+            <button><span>?</span></button>
+          </li>
+          <li>
+            <button id="settings" data-a11y-dialog-show="help-dialog" aria-pressed="false" title="Settings">
+              ⚙
+            </button>
+            <ul class="dropdown">
+              <li><button class="game--restart">Restart Game</button></li>
+            </ul>
+          </li>
+
+          <li>
+            <button
+              id="add-column"
+              aria-pressed="false"
+              title="Add three cards"
+            >
+              +3
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </header>
     <nav id="game-info" name="Game info and Controls">
+      <h2>Sets Found: <span id="sets-found">0</span></h2>
+      <hr />
+      <div class="card-vertical controls">
+        <p></p>
 
-        <h2> Sets Found: <span id=sets-found>0</span></h2>
-        <hr>
-        <div class="card-vertical controls">
-            <p><button class="game--restart">Restart Game</button></p>
-            <button id="check-for-sets" aria-pressed="false" aria-label="check for sets">Are there any Sets?</button>
-            <div id="yep-nope"></div>
-                <button id="colorblind-toggle" name="colorblind-toggle">
-                    <span id="cbm-enabled">Enable </span><span id="cbm-disabled">Disable </span> Color Blind Mode
-                </button>
-                <button id="add-column" aria-pressed="false">Add 3 Cards</button>
-        </div>
+        <div id="yep-nope"></div>
+        <button id="colorblind-toggle" name="colorblind-toggle">
+          <span id="cbm-enabled">Enable </span
+          ><span id="cbm-disabled">Disable </span> Color Blind Mode
+        </button>
+      </div>
 
-    <hr>
-    <div class="card-vertical cards-left"><span id="cards-left"> </span> Cards Left</div>
+      <hr />
+      <div class="card-vertical cards-left">
+        <span id="cards-left"> </span> Cards Left
+      </div>
+
+      <div id="color-slider">
+        <label>Red</label>
+        <input id="red-color-selector" type="color" value="#EE442F" />
+        <label>Green</label>
+        <input id="green-color-selector" type="color" value="#63ACBE" />
+        <label>Purple</label>
+        <input id="purple-color-selector" type="color" value="#601a4a" />
+      </div>
     </nav>
     <section id="board">
-        <svg width="0" height="0">
-            <!--  Define the patterns for the different fill colors  -->
-            <pattern id="shaded-Green" patternUnits="userSpaceOnUse" width="4" height="4">
-              <path d="M-1,1 H5" style="stroke:#63ACBE; stroke-width:1" />
-            </pattern>
-            <pattern id="shaded-Purple" patternUnits="userSpaceOnUse" width="4" height="4">
-              <path d="M-1,1 H5" style="stroke:#601a4a; stroke-width:1" />
-            </pattern>
-            <pattern id="shaded-Red" patternUnits="userSpaceOnUse" width="4" height="4">
-                <path d="M-1,1 H5" style="stroke:#EE442F; stroke-width:1" />
-              </pattern>
-        </svg> 
-        <div class="game--container">
-       
-            <div data-cell-index="0" class="cell empty"></div>
-            <div data-cell-index="1" class="cell empty"></div>
-            <div data-cell-index="2" class="cell empty"></div>
-            <div data-cell-index="3" class="cell empty"></div>
-            <div data-cell-index="4" class="cell empty"></div>
-            <div data-cell-index="5" class="cell empty"></div>
-            <div data-cell-index="6" class="cell empty"></div>
-            <div data-cell-index="7" class="cell empty"></div>
-            <div data-cell-index="8" class="cell empty"></div>
-            <div data-cell-index="9" class="cell empty"></div>
-            <div data-cell-index="10" class="cell empty"></div>
-            <div data-cell-index="11" class="cell empty"></div>
-        </div>
+      <svg width="0" height="0">
+        <!--  Define the patterns for the different fill colors  -->
+        <pattern
+          id="shaded-Green"
+          patternUnits="userSpaceOnUse"
+          width="4"
+          height="4"
+        >
+          <path
+            id="shaded-Green-path"
+            d="M-1,1 H5"
+            style="stroke: #63acbe; stroke-width: 1"
+          />
+        </pattern>
+        <pattern
+          id="shaded-Purple"
+          patternUnits="userSpaceOnUse"
+          width="4"
+          height="4"
+        >
+          <path
+            id="shaded-Purple-path"
+            d="M-1,1 H5"
+            style="stroke: #601a4a; stroke-width: 1"
+          />
+        </pattern>
+        <pattern
+          id="shaded-Red"
+          patternUnits="userSpaceOnUse"
+          width="4"
+          height="4"
+        >
+          <path
+            id="shaded-Red-path"
+            d="M-1,1 H5"
+            style="stroke: #ee442f; stroke-width: 1"
+          />
+        </pattern>
+      </svg>
+      <div class="game--container">
+        <div data-cell-index="0" class="cell empty"></div>
+        <div data-cell-index="1" class="cell empty"></div>
+        <div data-cell-index="2" class="cell empty"></div>
+        <div data-cell-index="3" class="cell empty"></div>
+        <div data-cell-index="4" class="cell empty"></div>
+        <div data-cell-index="5" class="cell empty"></div>
+        <div data-cell-index="6" class="cell empty"></div>
+        <div data-cell-index="7" class="cell empty"></div>
+        <div data-cell-index="8" class="cell empty"></div>
+        <div data-cell-index="9" class="cell empty"></div>
+        <div data-cell-index="10" class="cell empty"></div>
+        <div data-cell-index="11" class="cell empty"></div>
+      </div>
     </section>
-    <script src="index.js"></script>
-</body>
+    <div
+      class="dialog-container"
+      id="help-dialog"
+      aria-labelledby="help-dialog-title"
+      aria-hidden="true"
+    >
+      <!-- 2. The dialog overlay -->
+      <div class="dialog-overlay" data-a11y-dialog-hide></div>
+      <!-- 3. The actual dialog -->
+      <div class="dialog-content" role="document">
+        <!-- 4. The close button -->
+        <button class="dialog-close" type="button" data-a11y-dialog-hide aria-label="Close dialog">
+          &times;
+        </button>
+        <!-- 5. The dialog title -->
+        <h1 id="help-dialog-title">Help</h1>
+        <ul>
+          <li>
+            <button
+              id="check-for-sets"
+              aria-pressed="false"
+              aria-label="check for sets"
+            >
+              Are there any Sets?
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <script src="index.js" type="module"></script>
+  </body>
 </html>
