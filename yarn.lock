@@ -185,6 +185,18 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     "to-fast-properties" "^2.0.0"
 
+"@floating-ui/core@^1.0.0":
+  "integrity" "sha512-sm3nW0hHAxTv3gRDdCH8rNVQxijF+qPFo5gAeXCErRjKC7Qc28lIQ3R9Vd7Gw+KgwfA7RhRydDFuGeI0peGq7A=="
+  "resolved" "https://registry.npmjs.org/@floating-ui/core/-/core-1.0.0.tgz"
+  "version" "1.0.0"
+
+"@floating-ui/dom@^1.0.0":
+  "integrity" "sha512-PMqJvY5Fae8HVQgUqM+lidprS6p9LSvB0AUhCdYKqr3YCaV+WaWCeVNBtXPRY2YIdrgcsL2+vd5F07FxgihHUw=="
+  "resolved" "https://registry.npmjs.org/@floating-ui/dom/-/dom-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "@floating-ui/core" "^1.0.0"
+
 "@jridgewell/gen-mapping@^0.1.0":
   "integrity" "sha512-sQXCasFk+U8lWYEe66WxRDOE9PjVz4vSM51fTu3Hw+ClTpUSQb718772vH3pyS5pShp6lvQM7SxgIDXXXmOX7w=="
   "resolved" "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.1.1.tgz"

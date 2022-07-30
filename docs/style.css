@@ -1,6 +1,6 @@
 body {
     font-family: "Arial", sans-serif;
-    background-color: grey;
+    margin: auto
 }
 
 section {
@@ -9,15 +9,67 @@ section {
 
 header {
     border-bottom: 1px solid black;
-    display: flex;
-    justify-content: space-between;
 }
+
+header .title {
+    background-color: #003c54;
+    color: white;
+    width: 100%;
+    height: 50px;
+}
+
+header .title h1{
+    margin: inherit;
+    text-align: center;
+    padding: 5px;
+}
+
+
+header nav {
+    display: flex;
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+  
+header nav li {
+    display: inline-flex;
+}
+    
+
+header nav li:hover button,
+header nav li:focus button,
+header nav li:focus-within button {
+  color: #003c54;
+}
+
+.nav-icon:hover,
+.nav-icon:focus,
+.nav-icon:focus-visible {
+    background-color: #444;
+}
+
 
 header button {
     background-color: transparent;
     border: 0px;
-    font-size: larger;
   }
+
+.nav-text {
+    display: block;
+}
+
+.nav-icon {
+    display: none;
+}
+
+.nav-icon img {
+    width: 3rem;
+    height: 3rem;
+}
 
 
 #game-info {
@@ -25,14 +77,12 @@ header button {
     width: 20%;
 }
 
-#board {
-    float: left;
-    width: 80%;
-}
+
 
 .game--container {
     display: grid;
-    width: 90%;
+    width: 80%;
+    max-width: calc();
     grid-template-columns: repeat(4, 1fr);
     margin: auto;
     row-gap: 30px;
@@ -63,7 +113,6 @@ header button {
     height: 100%;
     cursor: pointer;
     font-size: 10px;
-    margin-left: 15px;
 }
 
 
@@ -74,7 +123,7 @@ header button {
     max-height: 175px;
     border-radius: 20px;
     box-shadow: 3px 2px grey;
-    border: 1px solid white;
+    border: 1px solid black;
     margin: auto;
     justify-content: center;
     align-content: center;
@@ -84,17 +133,31 @@ header button {
     flex-wrap: wrap;
 }
 
- 
+.card:focus-visible,
+.card:focus,
+.card:focus-within {
+    border-color: #003c54;
+    box-shadow: .5em .5em #003c54;
+    outline: #003c54;
+}
+
 .card:focus {
     transition: all .2;
-    box-shadow: 6px 4px 6px 4px #003c54;
-    border-color: #003c54;
 }
 
 .card.selected {
-    box-shadow: 6px 4px 6px 4px #000;
-    border-color: #000;
+    box-shadow: -.5em .5em black;
+    border: 4px solid black;
 }
+
+.card.selected:focus-visible,
+.card.selected:focus,
+.card.selected:focus-within {
+    border-color: #003c54;
+    box-shadow: -.75em .75em #003c54;
+    outline: #003c54;
+}
+
 
 .card-vertical {
     width: 110px;
@@ -201,74 +264,19 @@ header button {
 
 
 
-header nav ul {
-    list-style: none;
-    margin: 0;
-    padding-left: 0;
-  }
-  
-header nav li {
-    display: block;
-    float: left;
-    padding: 1rem;
-    position: relative;
-    text-decoration: none;
-    transition-duration: 0.5s;
-    border-radius: 15px;
-
-}
-    
-  
-header nav li:hover,
-header nav li:focus-within {
-    cursor: pointer;
-  }
-  
-
-header nav li:hover button,
-header nav li:focus-within button,
-header nav li:focus-within button {
-  color: red;
-}
-  
-header nav ul li ul {
-    background: white;
-    visibility: hidden;
-    opacity: 0;
-    min-width: 5rem;
-    position: absolute;
-    transition: all 0.5s ease;
-    margin-top: 1rem;
-    left: 0;
-    display: none;
-    z-index: 100;
-  }
-  
-header nav ul li:hover > ul,
-header nav ul li:focus-within > ul,
-header nav ul li ul:hover,
-header nav ul li ul:focus {
-    visibility: visible;
-    opacity: 1;
-    display: block
-  }
-  
-header nav ul li ul li {
-    clear: both;
-    width: 100%;
-  }
-
 
 
   @media (max-width: 768px) {
 
-    #game-info { 
+
+    .nav-text {
         display: none;
     }
 
-    #board {
-        width: 90%;
+    .nav-icon {
+        display: block;
     }
+
     .game--container {
         width: 100%
     }
@@ -277,7 +285,6 @@ header nav ul li ul li {
         min-height: 110px;
         border-radius: 10px;
         box-shadow: 3px 2px grey;
-        border: 1px solid white;
         margin: auto;
         justify-content: center;
         align-content: center;
@@ -285,6 +292,14 @@ header nav ul li ul li {
         background-color: white;
 
     }
+
+    .card.selected:focus-visible,
+    .card.selected:focus,
+    .card.selected:focus-within {
+    border-color: #003c54;
+    box-shadow: -.65em .65em #003c54;
+    outline: #003c54;
+}
 
     .extra-column {
         grid-template-columns: repeat(3, auto);
@@ -305,6 +320,8 @@ header nav ul li ul li {
         margin-bottom: -5px;
         margin-top: -5px;
       }
+
+    
 }
 
 
@@ -317,7 +334,7 @@ header nav ul li ul li {
  .dialog-container,
  .dialog-overlay {
    position: fixed; /* 1 */
-   top: 0; /* 1 */
+   top: 50px; /* 1 */
    right: 0; /* 1 */
    bottom: 0; /* 1 */
    left: 0; /* 1 */
@@ -345,18 +362,69 @@ header nav ul li ul li {
  /**
   * 1. Make the overlay look like an overlay.
   */
- .dialog-overlay {
-   background-color: rgba(43, 46, 56, 0.9); /* 1 */
+#color-dialog .dialog-overlay {
+   background-color: rgba(225, 225, 225, .6) /* 1 */
  }
  
+ .dialog-overlay {
+    background-color: rgba(225, 225, 225, .9) /* 1 */
+  }
  /**
   * 1. Vertically and horizontally center the dialog in the page.
   * 2. Make sure the dialog sits on top of the overlay.
   * 3. Make sure the dialog has an opaque background.
   */
  .dialog-content {
-   margin: auto; /* 1 */
-   z-index: 2; /* 2 */
-   position: relative; /* 2 */
-   background-color: white; /* 3 */
+    margin: 0 auto auto;
+    z-index: 2;
+    position: relative;
+    background-color: #003c54;
+    color: white;
+    padding: 20px;
+    width: 75%;
  }
+
+ .dialog-content a {
+     color: whitesmoke;
+     text-decoration: underline;
+
+}
+
+ .dialog-content h1 {
+    font-size: 1.3rem;
+ }
+ .dialog-content h2 {
+     font-size: 1.2rem;
+ }
+
+ .dialog-content button {
+    color: white;
+    border-radius: 5px;
+    border: 1px solid white;
+    background-color: transparent;
+    float: right;
+}
+
+.dialog-content .preset-colors button {
+    border-radius: 2px;
+    padding: 4px;
+    background-color: reset;
+}
+
+
+#color-picker ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+}
+
+#color-picker li {
+    display: inline-flex;
+}
+
+.sr-only {
+    height: 0;
+    width: 0;
+    position: absolute;
+    left: -1000px
+}

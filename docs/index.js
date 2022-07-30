@@ -412,6 +412,7 @@ var Fill;
     Fill["Shaded"] = "Shaded";
     Fill["Empty"] = "Empty";
 })(Fill || (Fill = {}));
+
 class Card {
     constructor(attributes) {
         this.shape = attributes.shape;
@@ -442,6 +443,7 @@ const randomEnum = (enumeration) => {
     const enumKey = values[Math.floor(Math.random() * values.length)];
     return enumeration[enumKey];
 };
+
 class Stack {
     constructor(stack_size = 81) {
         this.cards = [];
@@ -489,6 +491,7 @@ class Stack {
         }
     }
 }
+
 class Checker {
     static is_set(cards) {
         let colors = new Set();
@@ -522,69 +525,7 @@ class Checker {
         return false;
     }
 }
-// Keyboard Nav
-//------------//
-function keyboardInput(event) {
-    let currentEl = document.activeElement;
-    // if (!currentEl.classList.contains("card")){
-    //     focusOnFirstCard()
-    //     currentEl = document.activeElement
-    // }
-    let currentCardIndex = +currentEl.getAttribute("position");
-    // PRESS LEFT ARROW
-    if (event.keyCode == 37) {
-        if (currentCardIndex != 1) {
-            let newIndex = "" + (currentCardIndex - 1);
-            window.setTimeout(function () {
-                document.querySelector("[position='" + newIndex + "']").focus();
-            }, 0);
-        }
-    }
-    // PRESS UP ARROW
-    else if (event.keyCode == 38) {
-        if (currentCardIndex > (numberOfCards() / 3)) {
-            let newIndex = "" + (currentCardIndex - (numberOfCards() / 3));
-            window.setTimeout(function () {
-                document.querySelector("[position='" + newIndex + "']").focus();
-            }, 0);
-        }
-    }
-    // PRESS RIGHT ARROW
-    else if (event.keyCode == 39) {
-        if (currentCardIndex < lastCardIndex()) {
-            let newIndex = "" + (currentCardIndex + 1);
-            window.setTimeout(function () {
-                document.querySelector("[position='" + newIndex + "']").focus();
-            }, 0);
-        }
-    }
-    // PRESS DOWN ARROW
-    else if (event.keyCode == 40) {
-        if (currentCardIndex < lastCardIndex() - (numberOfCards() / 3 - 1)) {
-            let newIndex = "" + (currentCardIndex + (numberOfCards() / 3));
-            window.setTimeout(function () {
-                document.querySelector("[position='" + newIndex + "']").focus();
-            }, 0);
-        }
-    }
-}
-// Board Setup
-//------------//
-const fillSpots = function (stack, board) {
-    document.querySelector("#yep-nope").innerHTML = "";
-    let currentEmptyCells = allEmptyCells();
-    if (currentEmptyCells.length < stack.cards_left()) {
-        currentEmptyCells.forEach(function (cell) {
-            let card = stack.take_one();
-            addCardToCell(cell, card);
-            let el = cell;
-            let index = el.getAttribute("data-cell-index");
-            board[index] = card;
-        });
-        setCardsLeft();
-        focusOnFirstCard();
-    }
-};
+
 let squiggleSvg = `
 <svg class="shape" viewBox="-2 -2 54 104">
 <path d="M39.4,63.4c0,16.1,11,19.9,10.6,28.3c-0.5,8.2-21.1,12.2-33.4,3.8s-15.8-21.2-9.3-38c3.7-7.5,4.9-14,4.8-20 c0-16.1-11-19.9-10.6-27.3C1,0.1,21.6-3,33.9,6.5s15.8,21.2,9.3,38C40.4,50.6,38.5,57.4,38.4,63.4z">
@@ -606,12 +547,79 @@ let diamondSvg = `
 const shapeSVG = function (shape) {
     switch (shape) {
         case Shape.Squiggle:
-            console.log(shape);
             return squiggleSvg;
         case Shape.Diamond:
             return diamondSvg;
         case Shape.Pill:
             return pillSvg;
+    }
+};
+
+// Keyboard Nav
+//------------//
+function keyboardInput(event) {
+    let currentEl = document.activeElement;
+    let numRows = getNumberOfRows();
+    let numCards = numberOfCards();
+    let currentCardIndex = +currentEl.getAttribute("position");
+    // PRESS LEFT ARROW
+    if (event.keyCode == 37) {
+        if (currentCardIndex != 1) {
+            let newIndex = "" + (currentCardIndex - 1);
+            window.setTimeout(function () {
+                document.querySelector("[position='" + newIndex + "']").focus();
+            }, 0);
+        }
+    }
+    // PRESS UP ARROW
+    else if (event.keyCode == 38) {
+        if (currentCardIndex > (numCards / numRows)) {
+            let newIndex = "" + (currentCardIndex - (numCards / numRows));
+            window.setTimeout(function () {
+                document.querySelector("[position='" + newIndex + "']").focus();
+            }, 0);
+        }
+    }
+    // PRESS RIGHT ARROW
+    else if (event.keyCode == 39) {
+        if (currentCardIndex < lastCardIndex()) {
+            let newIndex = "" + (currentCardIndex + 1);
+            window.setTimeout(function () {
+                document.querySelector("[position='" + newIndex + "']").focus();
+            }, 0);
+        }
+    }
+    // PRESS DOWN ARROW
+    else if (event.keyCode == 40) {
+        if (currentCardIndex < lastCardIndex() - (numCards / numRows - 1)) {
+            let newIndex = "" + (currentCardIndex + (numCards / numRows));
+            window.setTimeout(function () {
+                document.querySelector("[position='" + newIndex + "']").focus();
+            }, 0);
+        }
+    }
+}
+const getNumberOfRows = function () {
+    const gc = document.querySelector(".game--container");
+    const gtc = getComputedStyle(gc).getPropertyValue('grid-template-rows');
+    let perRow = gtc.split(" ").length;
+    return perRow;
+};
+// Board Setup
+//------------//
+const fillSpots = function (stack, board) {
+    document.querySelector("#yep-nope").innerHTML = "";
+    let currentEmptyCells = allEmptyCells();
+    if (currentEmptyCells.length < stack.cards_left()) {
+        currentEmptyCells.forEach(function (cell) {
+            let card = stack.take_one();
+            addCardToCell(cell, card);
+            let el = cell;
+            let index = el.getAttribute("data-cell-index");
+            board[index] = card;
+        });
+        setCardsLeft();
+        focusOnFirstCard();
     }
 };
 const throwShade = function (color, shape) {
@@ -692,10 +700,16 @@ const removeAllCards = function () {
 };
 const pushCardsBack = function () {
     var _a;
+    //debugger
     let extras = [12, 13, 14]
-        .map((n) => document.querySelector("[data-cell-index='" + n + "']"))
-        .filter((node) => { var _a; return !((_a = node.classList) === null || _a === void 0 ? void 0 : _a.contains("empty")); });
-    console.log(extras);
+        .map((n) => document.querySelector("[data-cell-index='" + n + "']"));
+    const empty_extras = extras.filter((node) => { var _a; return (_a = node.classList) === null || _a === void 0 ? void 0 : _a.contains("empty"); });
+    empty_extras.forEach((node) => node.parentElement.removeChild(node));
+    extras = extras.filter((node) => {
+        var _a;
+        if (!((_a = node.classList) === null || _a === void 0 ? void 0 : _a.contains("empty")))
+            return node;
+    });
     for (let i = 0; i < 12; i++) {
         let node = document.querySelector("[data-cell-index='" + i + "']");
         if ((_a = node.classList) === null || _a === void 0 ? void 0 : _a.contains("empty")) {
@@ -708,6 +722,7 @@ const pushCardsBack = function () {
         }
     }
     document.querySelector(".game--container").classList.remove("extra-column");
+    toggleMoreCardsButton();
 };
 const handleAddThreeCards = function () {
     let container = document.querySelector(".game--container");
@@ -715,7 +730,7 @@ const handleAddThreeCards = function () {
     for (let i = 12; i <= 14; i++) {
         let d = document.createElement('div');
         d.classList.add('cell', 'empty');
-        d.setAttribute('data-cell-index', '' + i);
+        d.setAttribute('data-cell-index', String(i));
         container.appendChild(d);
     }
     setTimeout(() => fillSpots(stack, board), 700);
@@ -816,6 +831,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     addCellClickHandlers();
     document.addEventListener('keydown', keyboardInput);
     new A11yDialog(document.getElementById('help-dialog'));
+    new A11yDialog(document.getElementById('color-dialog'));
 });
 document.querySelector('.game--restart').addEventListener('click', handleRestartGame);
 document.querySelector('#check-for-sets').addEventListener('click', handleCheckForAnySets);

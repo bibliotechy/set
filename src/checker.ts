@@ -3,7 +3,7 @@ import { Color, Shape, Count, Fill } from "./attributes"
 
 class Checker{
     
-    static is_set (cards: [Card, Card, Card]): Boolean {
+    static is_set (cards: Array<Card>): Boolean {
         let colors: Set<Color> = new Set();
         let shapes: Set<Shape> = new Set();
         let counts: Set<Count> = new Set();

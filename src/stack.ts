@@ -1,5 +1,5 @@
-import { Card } from "./card.js"
-import { Color, Shape, Count, Fill } from "./attributes.js"
+import { Card } from "./card"
+import { Color, Shape, Count, Fill } from "./attributes"
 
 
 class Stack {
@@ -52,8 +52,8 @@ class Stack {
             // Do I want to return an error here? Or an empty array?
             throw new RangeError("Not enough cards left in the stack to take.")
         }
-
     }
 }
+
 
 export { Stack }

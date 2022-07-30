@@ -1,23 +1,23 @@
 {
   "dependencies": {
+    "@floating-ui/dom": "^1.0.0",
     "a11y-dialog": "^7.4.0"
   },
   "scripts": {
     "test": "mocha -r ts-node/register 'tests/**/*.ts'"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-typescript": "^8.3.2",
     "@types/chai": "^4.2.14",
     "@types/mocha": "^8.2.0",
     "chai": "^4.2.0",
     "mocha": "^10.0.0",
-    "ts-node": "^9.1.1",
     "rollup": "^2.70.2",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "10.1.0",
-    "@rollup/plugin-typescript": "^8.3.2",
     "rollup-plugin-terser": "7.0.2",
-    "@rollup/plugin-node-resolve": "^13.3.0",
+    "ts-node": "^9.1.1",
     "tslib": "^2.3.1"
-
   }
 }

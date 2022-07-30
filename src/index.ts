@@ -1,174 +1,18 @@
 import A11yDialog from 'a11y-dialog'
+import { Color,Shape, Fill, Count} from "./attributes"
+import { Card } from './card';
+import { Stack} from "./stack"
+import { Checker} from "./checker"
+import {shapeSVG} from "./svg"
 
-enum Color { 
-    Red    = "Red",
-    Green  = "Green", 
-    Purple = "Purple"
-}
-
-enum Shape { 
-    Diamond  = "Diamond", 
-    Squiggle = "Squiggle", 
-    Pill     = "Pill"
-}
-
-enum Count { 
-    One   = "One", 
-    Two   = "Two", 
-    Three = "Three"
-}
-
-enum Fill  { 
-    Solid  = "Solid", 
-    Shaded = "Shaded", 
-    Empty  = "Empty"
-}
-
-class Card {
-    shape: Shape;
-    color: Color;
-    count: Count;
-    fill:  Fill; 
-
-    constructor(attributes: CardParameters) {
-        this.shape = attributes.shape;
-        this.fill  = attributes.fill;
-        this.count = attributes.count;
-        this.color = attributes.color;
-    }
-
-    attributes(): CardParameters {
-        return {
-            shape: this.shape,
-            color: this.color,
-            count: this.count,
-            fill:  this.fill
-        }
-    }
-    
-    static random(): Card {
-        let attrs = {
-            shape: randomEnum(Shape),
-            color: randomEnum(Color),
-            count: randomEnum(Count),
-            fill:  randomEnum(Fill)
-        }
-        return new Card(attrs)
-    }
-}
-interface CardParameters {
-    shape: Shape
-    color: Color;
-    count: Count;
-    fill:  Fill; 
-}
-
-
-const randomEnum = (enumeration: any) => {
-    const values = Object.keys(enumeration);
-    const enumKey = values[Math.floor(Math.random() * values.length)];
-    return enumeration[enumKey];
-}
-
-class Stack {
-    cards: Card[] = [];
-    constructor(stack_size: number = 81) {
-        Object.keys(Color).forEach(color => {
-            Object.keys(Shape).forEach(shape => {
-                Object.keys(Count).forEach(count => {
-                    Object.keys(Fill).forEach(fill => {
-                        if (this.cards.length < stack_size) {
-                            let card = new Card({color: Color[color as keyof typeof Color], shape: Shape[shape as keyof typeof Shape], count: Count[count as keyof typeof Count], fill: Fill[fill as keyof typeof Fill]})
-                            this.cards.push(card)
-                        }
-                    })
-                })
-            })
-        });
-    }
-
-    // Expose the size of the stack at the top level of the object
-    cards_left(): number {
-        return this.cards.length
-    }
-    
-
-    take_one(): Card {
-        if (this.cards_left() > 0) {
-            return this.cards.splice(Math.floor(Math.random() * this.cards.length), 1)[0]
-        }
-        else {
-            throw new RangeError("This is an empty stack. Cannot take any cards from it")
-        }
-    }
-
-    take(n: number = 3): Card[] {
-        if (n <= this.cards_left()){
-            let cards: Card[] = [];
-            [...Array(n)].forEach(_ =>{
-                cards.push(this.take_one())
-            })
-            if (cards.length > 0) {
-                return cards
-            }
-            else {
-                throw new RangeError("Not enough cards left in the stack to take.")
-            }
-
-        }
-        else {
-            // Do I want to return an error here? Or an empty array?
-            throw new RangeError("Not enough cards left in the stack to take.")
-        }
-    }
-}
-
-class Checker{
-    
-    static is_set (cards: Array<Card>): Boolean {
-        let colors: Set<Color> = new Set();
-        let shapes: Set<Shape> = new Set();
-        let counts: Set<Count> = new Set();
-        let fills:  Set<Fill>  = new Set();
-        cards.forEach(card => {
-            colors.add(card.color)
-            counts.add(card.count)
-            fills.add(card.fill)
-            shapes.add(card.shape)
-        }); 
-        if ([colors, counts, shapes, fills].some( (set) => set.size == 2)) {
-            return false
-        }
-        return true
-    }
-
-    static any_sets(cards: Card[]): Boolean {
-        if (cards.length < 3) {
-            throw(RangeError("Not enough cards to check for a set"))
-        }
-        for(let first = 0; cards.length -2 > first; first++) {
-            for (let second = first + 1; cards.length -1 > second; second++ ){
-                for (let third = second + 1; cards.length > third; third++) {
-                    if (Checker.is_set([cards[first], cards[second], cards[third]])) {
-                        return true
-                    }
-                }
-            }
-        }
-        return false
-    }
-}
 
 
 // Keyboard Nav
 //------------//
 function keyboardInput(event: KeyboardEvent) {
     let currentEl = document.activeElement
-    // if (!currentEl.classList.contains("card")){
-    //     focusOnFirstCard()
-    //     currentEl = document.activeElement
-    // }
-
+    let numRows = getNumberOfRows()
+    let numCards = numberOfCards() 
     let currentCardIndex: number = +currentEl.getAttribute("position")
 
     // PRESS LEFT ARROW
@@ -182,8 +26,8 @@ function keyboardInput(event: KeyboardEvent) {
     }
     // PRESS UP ARROW
     else if (event.keyCode == 38) {
-        if (currentCardIndex > (numberOfCards() / 3)) {
-            let newIndex: string = "" + (currentCardIndex - (numberOfCards() /3));
+        if (currentCardIndex > (numCards / numRows)) {
+            let newIndex: string = "" + (currentCardIndex - (numCards /numRows));
             window.setTimeout( function() {
                (document.querySelector("[position='" + newIndex +"']") as HTMLElement).focus()}, 
                0);
@@ -201,13 +45,20 @@ function keyboardInput(event: KeyboardEvent) {
     }
     // PRESS DOWN ARROW
     else if (event.keyCode == 40) {
-        if (currentCardIndex < lastCardIndex() - (numberOfCards()/3 -1)) {
-            let newIndex: string = "" + (currentCardIndex + (numberOfCards()/3));
+        if (currentCardIndex < lastCardIndex() - (numCards/numRows -1)) {
+            let newIndex: string = "" + (currentCardIndex + (numCards/numRows));
             window.setTimeout( function() {
                (document.querySelector("[position='" + newIndex +"']") as HTMLElement).focus()}, 
                0);
         }
     }
+ }
+
+ const getNumberOfRows = function () : number {
+     const gc = document.querySelector(".game--container")
+     const gtc = getComputedStyle(gc).getPropertyValue('grid-template-rows')
+     let perRow = gtc.split(" ").length
+    return perRow
  }
 
 
@@ -228,43 +79,6 @@ function keyboardInput(event: KeyboardEvent) {
 
         setCardsLeft();
         focusOnFirstCard() 
-    }
-}
-
-let squiggleSvg = `
-<svg class="shape" viewBox="-2 -2 54 104">
-<path d="M39.4,63.4c0,16.1,11,19.9,10.6,28.3c-0.5,8.2-21.1,12.2-33.4,3.8s-15.8-21.2-9.3-38c3.7-7.5,4.9-14,4.8-20 c0-16.1-11-19.9-10.6-27.3C1,0.1,21.6-3,33.9,6.5s15.8,21.2,9.3,38C40.4,50.6,38.5,57.4,38.4,63.4z">
-</path>
-</svg>
-`
-
-let pillSvg = `
-<svg class="shape" viewBox="-2 -2 54 104">
-<path d="M25,99.5C14.2,99.5,5.5,90.8,5.5,80V20C5.5,9.2,14.2,0.5,25,0.5S44.5,9.2,44.5,20v60 C44.5,90.8,35.8,99.5,25,99.5z">
-</path>
-</svg>
-`
-
-let diamondSvg = `
-<svg class="shape" viewBox="-2 -2 54 104">
-<path d="M24 0 L48 48 L24 96 L0 48 Z">
-</path>
-</svg>
-`
- 
-const SVG_NS = 'http://www.w3.org/2000/svg';
-
-
-
-const shapeSVG = function(shape: Shape): string {
-    switch(shape) {
-        case Shape.Squiggle:
-            console.log(shape)
-            return squiggleSvg
-        case Shape.Diamond: 
-            return diamondSvg
-        case Shape.Pill: 
-            return pillSvg
     }
 }
 
@@ -367,10 +181,19 @@ const removeAllCards = function(): void {
 
 
 const pushCardsBack = function(): void {
+    //debugger
     let extras = [12, 13, 14]
         .map((n) => document.querySelector("[data-cell-index='" + n +  "']"))
-        .filter((node) => !(node.classList?.contains("empty")))
-        console.log(extras)
+    const empty_extras = extras.filter((node) => node.classList?.contains("empty"))
+    empty_extras.forEach((node) => node.parentElement.removeChild(node))
+    
+    extras = extras.filter((node) => {
+        if (!node.classList?.contains("empty")) 
+            return node
+        })
+
+    
+    
     for (let i = 0; i < 12; i++) {
         let node = document.querySelector("[data-cell-index='" + i+  "']")
         if (node.classList?.contains("empty")) {
@@ -383,6 +206,7 @@ const pushCardsBack = function(): void {
         }
     }
     document.querySelector(".game--container").classList.remove("extra-column")
+    toggleMoreCardsButton()
 }
 
 const handleAddThreeCards = function(): void{
@@ -391,7 +215,7 @@ const handleAddThreeCards = function(): void{
     for ( let i = 12; i <= 14; i++) {
         let d = document.createElement('div')
         d.classList.add('cell','empty')
-        d.setAttribute('data-cell-index',''+i)
+        d.setAttribute('data-cell-index',String(i))
         container.appendChild(d)
     }
     setTimeout(()=> fillSpots(stack, board), 700)
@@ -423,8 +247,10 @@ const handleRestartGame = function(): void {
 const handleCheckForAnySets = function(){
     let check = Checker.any_sets(board)
     let text = (check) ? "Yes" : "No";
-    document.querySelector("#yep-nope").innerHTML = text
+    const yepNope = document.querySelector("#yep-nope")
+    yepNope.innerHTML = text
 }
+
 
 
 const setCardsLeft = function(): void {
@@ -456,7 +282,7 @@ const handlePurpleColorChange = function(event: Event) {
 // Main Game Logic here
 //----------------------//
 const handleCellClick = function(event: MouseEvent | KeyboardEvent) {
-    // Shoudl handle stopping at three
+    // Should handle stopping at three
     let cell = event.target as HTMLElement;
     if (cell.classList.contains("shape")) {
         cell =  cell.parentElement
@@ -515,8 +341,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     document.addEventListener('keydown', keyboardInput);
     
-    const dialog = new A11yDialog(document.getElementById('help-dialog'))
-
+    const helpDialog   = new A11yDialog(document.getElementById('help-dialog'))
+    const colorDiaglon = new A11yDialog(document.getElementById('color-dialog'))
         
   })
 
