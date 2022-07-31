@@ -254,7 +254,7 @@ const handleCheckForAnySets = function(){
 
 const ensureOnly12Cards = function() {
     ["12","13", "14"].forEach((number) => {
-        document.querySelector(`[data-cell-index='${number}']`).remove()
+        document.querySelector(`[data-cell-index='${number}']`)?.remove()
     })
     document.querySelector(".game--container").classList.remove("extra-column")
     toggleMoreCardsButton()
@@ -350,6 +350,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     sets_found = 0;
     fillSpots(stack, board);
     addCellClickHandlers();
+    screen.orientation.lock("portrait")
 
     document.addEventListener('keydown', keyboardInput);
     

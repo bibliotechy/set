@@ -364,8 +364,6 @@ header button {
         width: 2.5rem;
         height: 2.5rem;
     }
-
-    
 }
 
 @media (max-width: 400px) {
@@ -376,10 +374,21 @@ header button {
 
     header nav ul#numbers li {
         font-size: .9rem;
-    }
-
-    
+    }   
 }
+
+
+#turn { display:none; }
+
+@media only screen and (orientation:landscape) and (max-width: 400px) {
+    #turn { display:block; }
+    #board { display:none; }
+  }
+
+@media only screen and (orientation:portrait) and (max-width: 400px) {
+    #turn { display:none; }
+    #board { display:block; }
+  }
 
 
 
