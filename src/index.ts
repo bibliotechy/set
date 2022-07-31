@@ -6,7 +6,6 @@ import { Checker} from "./checker"
 import {shapeSVG} from "./svg"
 
 
-
 // Keyboard Nav
 //------------//
 function keyboardInput(event: KeyboardEvent) {
@@ -66,7 +65,7 @@ function keyboardInput(event: KeyboardEvent) {
  //------------//
 
  const fillSpots = function(stack: Stack, board: Array<Card>): void {
-    document.querySelector("#yep-nope").innerHTML = ""
+    
     let currentEmptyCells = allEmptyCells()
     if (currentEmptyCells.length < stack.cards_left()) {
         currentEmptyCells.forEach( function(cell) {
@@ -246,9 +245,11 @@ const handleRestartGame = function(): void {
 
 const handleCheckForAnySets = function(){
     let check = Checker.any_sets(board)
-    let text = (check) ? "Yes" : "No";
-    const yepNope = document.querySelector("#yep-nope")
+    let text = (check) ? "There is at least one set on the board." : "There are no sets on the board. Add some cards.";
+    const yepNope = document.querySelector("#any-sets")
     yepNope.innerHTML = text
+    console.log("added ", text)
+
 }
 
 
@@ -335,19 +336,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
     board = []
     stack = new Stack()
     sets_found = 0;
-    console.log("Trying to fill the stack!")
     fillSpots(stack, board);
     addCellClickHandlers();
 
     document.addEventListener('keydown', keyboardInput);
     
     const helpDialog   = new A11yDialog(document.getElementById('help-dialog'))
-    const colorDiaglon = new A11yDialog(document.getElementById('color-dialog'))
-        
+    helpDialog.on("hide", () => handleDialogClose(event))
+    const colorDialog = new A11yDialog(document.getElementById('color-dialog'))
+    colorDialog.on("hide", () => handleDialogClose(event))
+    const checkDialog = new A11yDialog(document.getElementById('check-dialog'))
+    checkDialog.on("hide", () => handleDialogClose(event))    
   })
 
 
-
+function handleDialogClose(event: Event) {
+    (document.querySelector(".game--container button:nth-of-type(1)") as HTMLElement).focus()
+}
 
 document.querySelector('.game--restart').addEventListener('click', handleRestartGame);
 document.querySelector('#check-for-sets').addEventListener('click', handleCheckForAnySets);

@@ -34,24 +34,59 @@ header nav ul {
     margin: 0;
     padding-left: 0;
   }
+
+header nav ul#controls {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    width: 100%;
+}
+
+header nav ul#numbers {
+    display: grid;
+    grid-template-rows: repeat(1,1fr);
+}
+
+header nav ul#numbers li {
+    border-left: 1px solid #003c54;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+header nav ul#numbers li:nth-of-type(1) {
+    border-bottom: 1px solid #003c54;
+}
+   
+
   
 header nav li {
     display: inline-flex;
 }
+
+header nav li:focus-visible {
+    border: none;
+}
+
+header nav ul#numbers li dd {
+    margin-left: 15px;
+}
     
 
-header nav li:hover button,
-header nav li:focus button,
-header nav li:focus-within button {
+header nav li:hover button:not([disabled]),
+header nav li:focus button:not([disabled]),
+header nav li:focus-within button:not([disabled]) {
   color: #003c54;
 }
+
 
 .nav-icon:hover,
 .nav-icon:focus,
 .nav-icon:focus-visible {
-    background-color: #444;
+    transform: scale(1.3,1.3);
 }
 
+header li button[disabled] {
+    filter: opacity(.4);
+  }
 
 header button {
     background-color: transparent;
@@ -63,7 +98,7 @@ header button {
 }
 
 .nav-icon {
-    display: none;
+    display: block;
 }
 
 .nav-icon img {
@@ -113,6 +148,7 @@ header button {
     height: 100%;
     cursor: pointer;
     font-size: 10px;
+    z-index: -1;
 }
 
 
@@ -222,6 +258,7 @@ header button {
     width: 55px;
     height: 70px;
     transform: rotate(90deg);
+    z-index: 0;
 }
 
 
@@ -268,14 +305,6 @@ header button {
 
   @media (max-width: 768px) {
 
-
-    .nav-text {
-        display: none;
-    }
-
-    .nav-icon {
-        display: block;
-    }
 
     .game--container {
         width: 100%
@@ -428,3 +457,42 @@ header button {
     position: absolute;
     left: -1000px
 }
+
+
+/* Tooltip stuff */
+
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  content: attr(data-tooltip);
+  left: -3rem;
+  top: calc(100% );
+  border-radius: 3px;
+  box-shadow: 0 0 5px 2px rgba(100, 100, 100, 0.6);
+  background-color: #003c54;
+  color: #fff;
+  padding: 8px;
+  width: fit-content;
+  min-width: 6rem;
+  transform: translateY(-20px);
+  transition: all 150ms cubic-bezier(.25, .8, .25, 1);
+}
+
+[data-tooltip]:nth-of-type(1)::after {
+    left: 1rem !important;
+}
+
+[data-tooltip]:not([disabled]):hover::after,
+[data-tooltip]:not([disabled]):focus::after {
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: 300ms;
+  z-index: 500;
+}
+
+

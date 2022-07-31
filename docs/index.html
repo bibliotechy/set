@@ -18,58 +18,56 @@
     </div>
     <div class="header-nav">
       <nav role="navigation">
-        <div class="info">
-          <ul>
-            <li>
-              <button id="color" data-a11y-dialog-show="help-dialog" aria-pressed="false" title="Settings"><span class="nav-text">How to play</span><span class="nav-icon"><img src="img/instructions.png" alt="Open book" title="How to play"/></span></button>
-            </li>
-            <li>
-              <button id="color" data-a11y-dialog-show="color-dialog" aria-pressed="false" title="Adjust colors">
-                <span class="nav-text">Adjust colors</span>
-                <span class="nav-icon">
-                  <img src="img/pallette.png" alt="Paintbrush and can" title="Adjust the colors" />
-                </span>
-              </button>
-            </li>
-            <li>
-              <ul class="dropdown">
-                <li>
-                  <button class="game--restart">
-                    <span class="nav-text">Restart Game</span>
-                    <span class="nav-icon">
-                      <img src="img/restart.png" alt="Paintbrush and can" title="Restart the game" />
-                    </span>
-                  </button>
-                </li>
- 
-            <li>
-              <button
-              id="check-for-sets"
-              aria-pressed="false"
-              aria-label="check for sets"
+        <ul id="controls"> 
+          <li>
+            <button id="color" data-a11y-dialog-show="help-dialog" data-tooltip="About acc-set-sible" aria-pressed="false">
+              <span class="nav-icon"><img src="img/instructions.png" alt="Open book"/></span>
+            </button>
+          </li>
+          <li>
+            <button id="color" data-a11y-dialog-show="color-dialog" aria-pressed="false" data-tooltip="Adjust colors">
+              <span class="nav-icon">
+                <img src="img/pallette.png" alt="Paintbrush and can" />
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="game--restart" aria-pressed="false" data-tooltip="Restart Game">
+              <span class="nav-icon" >
+                <img src="img/restart.png" alt="Paintbrush and can">
+              </span>
+            </button>
+          </li>
+
+          <li>
+            <button
+            id="check-for-sets"
+            data-a11y-dialog-show="check-dialog"
+            data-tooltip="Check for sets on the board"
+            aria-pressed="false"
+            aria-label="check for sets"
             >
-              Are there any Sets?
-            </button> <div id="yep-nope"></div></li>
-            <li>
-              <button
-                id="add-column"
-                aria-pressed="false"
-                title="Add three cards"
-              >
-                Add 3 cards
-              </button>
-            </li>
-            <li id="numbers">
-              <div>
-                Sets Found: <span id="sets-found">0</span>
-              </div>
-              <div>
-                Cards Left: <span id="cards-left">  </span>
-              </div>
-            </li>
+              <span class="nav-icon" >
+                <img src="img/check.png" alt="Magnifying glass with check in the middle"/>
+              </span>
+            </button> 
+          </li>
+          <li>
+            <button
+              id="add-column"
+              aria-pressed="false"
+              data-tooltip="Add three cards"
+            >
+              <span class="nav-icon" >
+                <img src="img/plus2.png" alt="Three playing cards stacked up" />
+              </span>
+            </button>
+          </li>
+          <ul id="numbers">
+            <li id="sets-found-wrapper"><dt>Sets Found</dt> <dd><span id="sets-found">0</span></dd></li>
+            <li id="cards-left-wrapper"><dt>Cards Left</dt> <dd><span id="cards-left"></span></dd></li>
           </ul>
-        </div>
-        
+        </ul>
       </nav>
       </div>
     </header>
@@ -192,20 +190,9 @@
         <button class="dialog-close" type="button" data-a11y-dialog-hide aria-label="Close dialog">
           &times;
         </button>
-        <h1 id="help-dialog-title">What is acc-set-sible?</h1>
+        <h1 id="help-dialog-title">How to play</h1>
         <div>
-          <p><a href="https://www.playmonster.com/product/set/">set</a> is one of my favorite tabletop games 
-          to play with friends and family, but it can be difficult for people with certain kinds of colorblindness
-          to play because the red and green colors may not be discernable. 
-          </p>
-          <p><i>acc-set-sible</i> starts with a default color scheme that should work for people
-            with many kinds of colorblindness, but also provides the option adjust each color as 
-            needed to improve contrast between the colors.
-            </p>
-        </div>
-        <div>
-          <h2>How to Play</h2>
-          <p>The goal of set is to find three cards on the 
+          <p>The goal of <a href="https://www.playmonster.com/product/set/">set</a> is to find three cards on the 
           table that make a set. A set is three cards where each individual feature 
           (color, shape, number and shading) is either all the same OR all different!
           </p>
@@ -213,8 +200,44 @@
           The makers of set have a <a href="https://www.youtube.com/watch?v=azaArSs-i0c">good introductory video</a> on how to play to get you started.
           </p>
         </div>
+        <div>
+          <h2>Why acc-set-sible?</h2>
+          <p> Set is one of my favorite tabletop games, but it isn't colorblind friendly. <i>acc-set-sible</i> starts with a default 
+            color scheme that should work for people with many kinds of colorblindness, but also provides the option adjust each color as 
+            needed. Hopefully, <i>acc-set-sible</i> makes the game 
+          </p>
+        </div>
+        <div>
+          <h2>Who made this?</h2>
+          <p> I'm <a href="https://chads.space">Chad Nelson</a>, software engineer, reader, game lover etc.</p>
+          <p> If you have any feedback on acc-set-sible, reach out at <i>chadbnelson</i> at <i>gmail.com</i>.</p>
+        </div>
       </div>
     </div>
+
+    <div
+      class="dialog-container small"
+      id="check-dialog"
+      aria-labelledby="check-dialog-title"
+      aria-hidden="true"
+    >
+      <!-- 2. The dialog overlay -->
+      <div class="dialog-overlay" data-a11y-dialog-hide></div>
+      <!-- 3. The actual dialog -->
+      <div class="dialog-content" role="document">
+        <button class="dialog-close" type="button" data-a11y-dialog-hide aria-label="Close dialog">
+          &times;
+        </button>
+        <h1 id="color-dialog-title">Are there any sets on the board?</h1>
+        <div id="color-picker">
+          <div>
+            <p id="any-sets"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <script src="index.js" type="module"></script>
     <script defer data-domain="chads.space" src="https://plausible.io/js/plausible.js"></script>
   </body>
