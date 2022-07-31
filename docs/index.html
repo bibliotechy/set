@@ -18,6 +18,7 @@
     </div>
     <div class="header-nav">
       <nav role="navigation">
+        <div id="nav-buttons">
         <ul id="controls"> 
           <li>
             <button id="color" data-a11y-dialog-show="help-dialog" data-tooltip="About acc-set-sible" aria-pressed="false">
@@ -38,7 +39,6 @@
               </span>
             </button>
           </li>
-
           <li>
             <button
             id="check-for-sets"
@@ -63,18 +63,18 @@
               </span>
             </button>
           </li>
-          <ul id="numbers">
-            <li id="sets-found-wrapper"><dt>Sets Found</dt> <dd><span id="sets-found">0</span></dd></li>
-            <li id="cards-left-wrapper"><dt>Cards Left</dt> <dd><span id="cards-left"></span></dd></li>
-          </ul>
         </ul>
+      </div>
+      <div id="nav-numbers">
+        <ul id="numbers">
+          <li id="sets-found-wrapper"><dt>Sets Found: </dt> <dd><span id="sets-found">0</span></dd></li>
+          <li id="cards-left-wrapper"><dt>Cards Left: </dt> <dd><span id="cards-left"></span></dd></li>
+        </ul>
+      </div>
       </nav>
       </div>
     </header>
-    <nav id="game-info" name="Game info and Controls">
-
-
-    </nav>
+   
     <section id="board">
       <svg width="0" height="0">
         <!--  Define the patterns for the different fill colors  -->

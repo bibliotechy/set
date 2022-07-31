@@ -230,7 +230,6 @@ const toggleMoreCardsButton = function(): void {
 const addCellClickHandlers = function(): void {
     document.querySelectorAll('.cell').forEach(cell => {
         cell.addEventListener('click', handleCellClick);
-        
     })
 }
 
@@ -241,6 +240,7 @@ const handleRestartGame = function(): void {
     board = []
     stack = new Stack()
     sets_found = 0;
+    ensureOnly12Cards()
     fillSpots(stack, board);
 }
 
@@ -251,6 +251,15 @@ const handleCheckForAnySets = function(){
     yepNope.innerHTML = text
 
 }
+
+const ensureOnly12Cards = function() {
+    ["12","13", "14"].forEach((number) => {
+        document.querySelector(`[data-cell-index='${number}']`).remove()
+    })
+    document.querySelector(".game--container").classList.remove("extra-column")
+    toggleMoreCardsButton()
+    
+} 
 
 
 
@@ -283,11 +292,14 @@ const handlePurpleColorChange = function(event: Event) {
 // Main Game Logic here
 //----------------------//
 const handleCellClick = function(event: MouseEvent | KeyboardEvent| TouchEvent) {
-    console.log(event)
     // Should handle stopping at three
     let cell = event.target as HTMLElement;
     if (cell.classList.contains("shape")) {
         cell =  cell.parentElement
+    }
+
+    if (cell.tagName == "path") {
+        cell =  cell.parentElement.parentElement
     }
     if (cell.classList.contains("selected")) {
         cell.classList.remove("selected")
@@ -301,7 +313,6 @@ const handleCellClick = function(event: MouseEvent | KeyboardEvent| TouchEvent) 
         
         if (selectedCards().length == 3) {
             if (Checker.is_set(c)) {
-                console.log("Yay you found a set")
                 selectedCards().forEach( cardElement => {
                     (cardElement as HTMLElement).style.transform = "scale(1.5)";
                     (cardElement as HTMLElement).style.transform = "scale(0)";
@@ -341,7 +352,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     addCellClickHandlers();
 
     document.addEventListener('keydown', keyboardInput);
-    document.addEventListener('touchstart', (event) => console.log(event));
     
     const helpDialog   = new A11yDialog(document.getElementById('help-dialog'))
     helpDialog.on("hide", () => handleDialogClose(event))

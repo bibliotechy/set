@@ -26,8 +26,9 @@ header .title h1{
 
 
 header nav {
-    display: flex;
-}
+    display: grid;
+    grid-template-columns: repeat(1, 6fr 1fr);
+  }
 
 header nav ul {
     list-style: none;
@@ -41,15 +42,20 @@ header nav ul#controls {
     width: 100%;
 }
 
+header nav #nav-numbers {
+    border-left: 1px solid #003c54;
+}
+
 header nav ul#numbers {
     display: grid;
     grid-template-rows: repeat(1,1fr);
 }
 
 header nav ul#numbers li {
-    border-left: 1px solid #003c54;
+    
     padding-left: 3px;
     padding-right: 3px;
+    line-height: 1.5rem;
 }
 
 header nav ul#numbers li:nth-of-type(1) {
@@ -67,9 +73,9 @@ header nav li:focus-visible {
 }
 
 header nav ul#numbers li dd {
-    margin-left: 15px;
+    margin-left: 5px;
 }
-    
+
 
 header nav li:hover button:not([disabled]),
 header nav li:focus button:not([disabled]),
@@ -306,6 +312,9 @@ header button {
 
   @media (max-width: 768px) {
 
+    header nav {
+        grid-template-columns: repeat(1, 6fr 3fr);
+    }
 
     .game--container {
         width: 100%
@@ -351,9 +360,26 @@ header button {
         margin-top: -5px;
       }
 
+      .nav-icon img {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
     
 }
 
+@media (max-width: 400px) {
+    .nav-icon img {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    header nav ul#numbers li {
+        font-size: .9rem;
+    }
+
+    
+}
 
 
 
