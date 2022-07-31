@@ -412,7 +412,7 @@ header button {
   *    dialog.
   */
  .dialog-container {
-   z-index: 2; /* 1 */
+   z-index: 200; /* 1 */
    display: flex; /* 2 */
  }
  
@@ -441,7 +441,7 @@ header button {
   */
  .dialog-content {
     margin: 0 auto auto;
-    z-index: 2;
+    z-index: 200;
     position: relative;
     background-color: #003c54;
     color: white;
@@ -528,7 +528,7 @@ header button {
   opacity: 1;
   transform: translateY(0);
   transition-duration: 300ms;
-  z-index: 500;
+  z-index: 100;
 }
 
 

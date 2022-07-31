@@ -356,15 +356,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
     
     const helpDialog   = new A11yDialog(document.getElementById('help-dialog'))
     helpDialog.on("hide", () => handleDialogClose(event))
+    helpDialog.on("show", () => handleDialogOpen('help-dialog'))
     const colorDialog = new A11yDialog(document.getElementById('color-dialog'))
     colorDialog.on("hide", () => handleDialogClose(event))
+    colorDialog.on("show", () => handleDialogOpen('color-dialog'))
     const checkDialog = new A11yDialog(document.getElementById('check-dialog'))
-    checkDialog.on("hide", () => handleDialogClose(event))    
+    checkDialog.on("hide", () => handleDialogClose(event))
+    checkDialog.on("show", () => handleDialogOpen('check-dialog'))
   })
 
 
 function handleDialogClose(event: Event) {
     (document.querySelector(".game--container button:nth-of-type(1)") as HTMLElement).focus()
+}
+function handleDialogOpen(selector: string) {
+    (document.getElementById(selector) as HTMLElement).blur()
 }
 
 document.querySelector('.game--restart').addEventListener('click', handleRestartGame);
