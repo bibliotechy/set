@@ -230,6 +230,7 @@ const toggleMoreCardsButton = function(): void {
 const addCellClickHandlers = function(): void {
     document.querySelectorAll('.cell').forEach(cell => {
         cell.addEventListener('click', handleCellClick);
+        
     })
 }
 
@@ -248,7 +249,6 @@ const handleCheckForAnySets = function(){
     let text = (check) ? "There is at least one set on the board." : "There are no sets on the board. Add some cards.";
     const yepNope = document.querySelector("#any-sets")
     yepNope.innerHTML = text
-    console.log("added ", text)
 
 }
 
@@ -282,7 +282,8 @@ const handlePurpleColorChange = function(event: Event) {
 
 // Main Game Logic here
 //----------------------//
-const handleCellClick = function(event: MouseEvent | KeyboardEvent) {
+const handleCellClick = function(event: MouseEvent | KeyboardEvent| TouchEvent) {
+    console.log(event)
     // Should handle stopping at three
     let cell = event.target as HTMLElement;
     if (cell.classList.contains("shape")) {
@@ -340,6 +341,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     addCellClickHandlers();
 
     document.addEventListener('keydown', keyboardInput);
+    document.addEventListener('touchstart', (event) => console.log(event));
     
     const helpDialog   = new A11yDialog(document.getElementById('help-dialog'))
     helpDialog.on("hide", () => handleDialogClose(event))

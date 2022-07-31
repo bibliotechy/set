@@ -123,6 +123,7 @@ header button {
     row-gap: 30px;
     column-gap: 5%;
     transition: 1s;
+    z-index: -1;
 }
 
 .extra-column {
@@ -148,7 +149,7 @@ header button {
     height: 100%;
     cursor: pointer;
     font-size: 10px;
-    z-index: -1;
+    z-index: 0;
 }
 
 
