@@ -227,6 +227,11 @@ const toggleMoreCardsButton = function(): void {
     document.querySelector("#add-column").toggleAttribute("disabled")
 }
 
+
+const ensureAddThreeCardsButtonActive = function(): void {
+    document.querySelector("#add-column").removeAttribute("disabled")
+}
+
 const addCellClickHandlers = function(): void {
     document.querySelectorAll('.cell').forEach(cell => {
         cell.addEventListener('click', handleCellClick);
@@ -257,7 +262,7 @@ const ensureOnly12Cards = function() {
         document.querySelector(`[data-cell-index='${number}']`)?.remove()
     })
     document.querySelector(".game--container").classList.remove("extra-column")
-    toggleMoreCardsButton()
+    ensureAddThreeCardsButtonActive()
     
 } 
 
@@ -350,19 +355,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
     sets_found = 0;
     fillSpots(stack, board);
     addCellClickHandlers();
-    screen.orientation.lock("portrait")
 
     document.addEventListener('keydown', keyboardInput);
     
     const helpDialog   = new A11yDialog(document.getElementById('help-dialog'))
     helpDialog.on("hide", () => handleDialogClose(event))
-    helpDialog.on("show", () => handleDialogOpen('help-dialog'))
+    
     const colorDialog = new A11yDialog(document.getElementById('color-dialog'))
     colorDialog.on("hide", () => handleDialogClose(event))
-    colorDialog.on("show", () => handleDialogOpen('color-dialog'))
+   
     const checkDialog = new A11yDialog(document.getElementById('check-dialog'))
     checkDialog.on("hide", () => handleDialogClose(event))
-    checkDialog.on("show", () => handleDialogOpen('check-dialog'))
+   
   })
 
 
