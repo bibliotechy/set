@@ -357,6 +357,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     addCellClickHandlers();
 
     document.addEventListener('keydown', keyboardInput);
+    document.addEventListener('touchstart', (event) =>  console.log(event));
+    
     
     const helpDialog   = new A11yDialog(document.getElementById('help-dialog'))
     helpDialog.on("hide", () => handleDialogClose(event))
