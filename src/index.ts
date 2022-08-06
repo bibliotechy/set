@@ -273,26 +273,75 @@ const setCardsLeft = function(): void {
 }
 
 // Color change logic
-const handleColorChange = function(event : Event, color: string): void {
-    const currentElem = event.target as HTMLInputElement;
-    const hex = currentElem.value
+const handleColorChange = function(event : Event): void {
+    const colorSelector = event.target as HTMLInputElement;
+    _applyColorSelection(colorSelector);
+   
+}
+
+const _applyColorSelection = function (colorSelector: HTMLInputElement) {
+    const color = colorSelector.dataset['color']
+    const hex = colorSelector.value
     var colorStyle = document.getElementById("colorStyle");
     colorStyle.append("." + color +".Solid { fill: " + hex+ "} ." + color + "{stroke: "  + hex +  "}");
     document.getElementById("shaded-"+ color +"-path").setAttribute("style","stroke:" + hex +"; stroke-width:1")
 }
 
-const handleRedColorChange = function(event: Event) {
-    handleColorChange(event, "Red")
+const handleResetColor = function(event: Event) {
+    const colorInput = (event.target  as HTMLInputElement).previousElementSibling as HTMLInputElement;
+    colorInput.value = colorInput.dataset["initialColor"];
+    _applyColorSelection(colorInput)
 }
 
-const handleGreenColorChange = function(event: Event) {
-    handleColorChange(event, "Green")
+interface IParamMap {
+    [key: string]: string
 }
 
-const handlePurpleColorChange = function(event: Event) {
-    handleColorChange(event, "Purple")
+const handleColorUrlParams = function () {
+    if (window.location.search) {
+        const param_string = window.location.search.slice(1,) // remove the opening "?"
+        const pmap : IParamMap= {}
+        param_string.split("&").forEach((param) => { 
+            let k: string, v:string;
+            [k, v] = param.split("=")
+            pmap[k] = v
+        })
+        console.log(pmap)
+        if (pmap.c1) { setColorOne(pmap.c1)}
+        if (pmap.c2) { setColorTwo(pmap.c2)}
+        if (pmap.c3) { setColorThree(pmap.c3)}
+
+    }
 }
 
+const setColorOne = function(color: string) {
+    if (isHexColor(color)) {
+        const el = document.querySelector('[data-color="Red"]') as HTMLInputElement;
+        el.value = `#${color}`
+        _applyColorSelection(el)
+    }
+}
+
+const setColorTwo = function (color: string) {
+    if (isHexColor(color)) {
+        const el = document.querySelector('[data-color="Green"]') as HTMLInputElement;
+        el.value = `#${color}`
+        _applyColorSelection(el)
+    }
+}
+
+const setColorThree = function(color: string) {
+    if (isHexColor(color)) {
+        const el = document.querySelector('[data-color="Purple"]') as HTMLInputElement;
+        el.value = `#${color}`
+        _applyColorSelection(el)
+    }
+}
+
+const isHexColor = function(color: string) {
+    const re = /[0-9A-Fa-f]{6}/g
+    return re.test(color)
+}
 
 // Main Game Logic here
 //----------------------//
@@ -353,6 +402,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     board = []
     stack = new Stack()
     sets_found = 0;
+    handleColorUrlParams()
     fillSpots(stack, board);
     addCellClickHandlers();
 
@@ -382,6 +432,5 @@ function handleDialogOpen(selector: string) {
 document.querySelector('.game--restart').addEventListener('click', handleRestartGame);
 document.querySelector('#check-for-sets').addEventListener('click', handleCheckForAnySets);
 document.querySelector('#add-column').addEventListener('click', handleAddThreeCards);
-document.getElementById("red-color-selector").addEventListener("input", handleRedColorChange);
-document.getElementById("green-color-selector").addEventListener("input", handleGreenColorChange);
-document.getElementById("purple-color-selector").addEventListener("input", handlePurpleColorChange);
+document.querySelectorAll(".color-selector").forEach((el) => el.addEventListener("input", handleColorChange));
+document.querySelectorAll(".color-reset").forEach((el) => el.addEventListener("click", handleResetColor));

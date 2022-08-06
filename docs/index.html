@@ -24,6 +24,16 @@
         needed. Hopefully, acc-set-sible makes the game available to more people.">
     <meta name="twitter:image" content="https://chads.space/set/img/set.png">
     <link rel="stylesheet" href="style.css" />
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">
+    <link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+
+
     <style id="colorStyle"></style>
   </head>
   <body>
@@ -180,15 +190,18 @@
             <ul>
               <li>
                 <label class=sr-only>Color 1:  Initially reddish</label>
-                <input id="red-color-selector" type="color" value="#EE442F" />
+                <input class="color-selector" type="color" value="#EE442F" data-color="Red" data-initial-color="#EE442F" />
+                <button class="color-reset"> Reset </button>
               </li>
               <li>
                 <label class=sr-only>Color 2: initially light blue</label>
-                <input id="green-color-selector" type="color" value="#63ACBE" />
+                <input class="color-selector" type="color" value="#63ACBE" data-color="Green" data-initial-color="#63ACBE" />
+                <button class="color-reset"> Reset </button>
               </li>
               <li>
                 <label class=sr-only>Color 3: initially dark purple</label>
-                <input id="purple-color-selector" type="color" value="#601a4a" />
+                <input class="color-selector" type="color" value="#601a4a" data-color="Purple" data-initial-color="#601a4a" />
+                <button class="color-reset"> Reset </button>
               </li>
             </ul>
           </div>
