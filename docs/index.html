@@ -11,7 +11,7 @@
     <meta name="author" content="Chad Nelson">
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://chads.space/set/img/set.png" />
-    <meta property="og:description" content="Set is one of my favorite tabletop games, but it isn't colorblind friendly. acc-set-sible< starts with a default 
+    <meta property="og:description" content="Set is one of my favorite tabletop games, but it isn't colorblind friendly. acc-set-sible starts with a default 
     color scheme that should work for people with many kinds of colorblindness, but also provides the option adjust each color as 
     needed. Hopefully, acc-set-sible makes the game available to more people." />
 
@@ -19,7 +19,7 @@
     <meta property="twitter:domain" content="chads.space">
     <meta property="twitter:url" content="http://chads.space/set/">
     <meta name="twitter:title" content="acc-set-sible - an accessible set game">
-    <meta name="twitter:description" content="Set is one of my favorite tabletop games, but it isn't colorblind friendly. acc-set-sible< starts with a default 
+    <meta name="twitter:description" content="Set is one of my favorite tabletop games, but it isn't colorblind friendly. acc-set-sible starts with a default 
         color scheme that should work for people with many kinds of colorblindness, but also provides the option adjust each color as 
         needed. Hopefully, acc-set-sible makes the game available to more people.">
     <meta name="twitter:image" content="https://chads.space/set/img/set.png">
@@ -39,55 +39,56 @@
   <body>
     <header class="header">
       <div class="title">
+      <div id="about"><button id="color" data-a11y-dialog-show="help-dialog" title="About acc-set-sible" aria-pressed="false" class="text-button">About</button></div>
       <h1 title="acc-set-sible - an accessible set game">
         acc-set-sible
       </h1>
+      <div id="how-to-play"><button id="howto" data-a11y-dialog-show="howto-dialog" title="How to play Acc-set-sible" aria-pressed="false" class="text-button">How to Play</button></div>
     </div>
     <div class="header-nav">
       <nav role="navigation">
         <div id="nav-buttons">
         <ul id="controls"> 
           <li>
-            <button id="color" data-a11y-dialog-show="help-dialog" data-tooltip="About acc-set-sible" aria-pressed="false">
-              <span class="nav-icon"><img src="img/instructions.png" alt="Open book"/></span>
-            </button>
-          </li>
-          <li>
-            <button id="color" data-a11y-dialog-show="color-dialog" aria-pressed="false" data-tooltip="Adjust colors">
+            <button id="color" data-a11y-dialog-show="color-dialog" aria-pressed="false" title="Adjust colors">
               <span class="nav-icon">
                 <img src="img/pallette.png" alt="Paintbrush and can" />
               </span>
+              <span class="not-on-small">Adjust </span>Colors
             </button>
+            
           </li>
           <li>
-            <button class="game--restart" aria-pressed="false" data-tooltip="Restart Game">
+            <button class="game--restart" aria-pressed="false" title="Restart Game">
               <span class="nav-icon" >
                 <img src="img/restart.png" alt="Paintbrush and can">
               </span>
+              Restart<span class="not-on-small"> Game</span>
             </button>
           </li>
           <li>
             <button
             id="check-for-sets"
             data-a11y-dialog-show="check-dialog"
-            data-tooltip="Check for sets on the board"
+            title="Check for sets on the board"
             aria-pressed="false"
             aria-label="check for sets"
             >
               <span class="nav-icon" >
                 <img src="img/check.png" alt="Magnifying glass with check in the middle"/>
               </span>
+              Help
             </button> 
           </li>
           <li>
             <button
               id="add-column"
               aria-pressed="false"
-              data-tooltip="Add three cards"
             >
               <span class="nav-icon" >
-                <img src="img/plus2.png" alt="Three playing cards stacked up" />
+                <img src="img/cards2.png" alt="Three playing cards stacked up" />
               </span>
+              +3&nbsp;Cards
             </button>
           </li>
         </ul>
@@ -101,8 +102,6 @@
       </nav>
       </div>
     </header>
-
-    <div id="turn"><h1>Landscape mode is not currently supported</h1></div>
    
     <section id="board">
       <svg width="0" height="0">
@@ -209,6 +208,35 @@
       </div>
     </div>
 
+
+    
+
+    <div
+      class="dialog-container"
+      id="howto-dialog"
+      aria-labelledby="howto-dialog-title"
+      aria-hidden="true"
+    >
+      <!-- 2. The dialog overlay -->
+      <div class="dialog-overlay" data-a11y-dialog-hide></div>
+      <!-- 3. The actual dialog -->
+      <div class="dialog-content" role="document">
+        <button class="dialog-close" type="button" data-a11y-dialog-hide aria-label="Close dialog">
+          &times;
+        </button>
+        <h1 id="howto-dialog-title">How to play</h1>
+        <div>
+          <p>The goal of <a href="https://www.playmonster.com/product/set/" target="_blank">set</a> is to find three cards on the 
+          table that make a set. A set is three cards where each individual feature 
+          (color, shape, number and shading) is either all the same OR all different!
+          </p>
+          <p>
+          The makers of set have a <a href="https://www.youtube.com/watch?v=azaArSs-i0c" target="_blank">good introductory video</a> on how to play to get you started.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <div
       class="dialog-container"
       id="help-dialog"
@@ -222,16 +250,6 @@
         <button class="dialog-close" type="button" data-a11y-dialog-hide aria-label="Close dialog">
           &times;
         </button>
-        <h1 id="help-dialog-title">How to play</h1>
-        <div>
-          <p>The goal of <a href="https://www.playmonster.com/product/set/">set</a> is to find three cards on the 
-          table that make a set. A set is three cards where each individual feature 
-          (color, shape, number and shading) is either all the same OR all different!
-          </p>
-          <p>
-          The makers of set have a <a href="https://www.youtube.com/watch?v=azaArSs-i0c">good introductory video</a> on how to play to get you started.
-          </p>
-        </div>
         <div>
           <h2>Why acc-set-sible?</h2>
           <p> Set is one of my favorite tabletop games, but it isn't colorblind friendly. <i>acc-set-sible</i> starts with a default 

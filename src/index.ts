@@ -418,6 +418,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
    
     const checkDialog = new A11yDialog(document.getElementById('check-dialog'))
     checkDialog.on("hide", () => handleDialogClose(event))
+
+    const howToDialog = new A11yDialog(document.getElementById('howto-dialog'))
+    checkDialog.on("hide", () => handleDialogClose(event))
    
   })
 

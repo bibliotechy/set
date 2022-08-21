@@ -14,14 +14,25 @@ header {
 header .title {
     background-color: #003c54;
     color: white;
+    display: flex;
+    justify-content: space-between;
     width: 100%;
-    height: 50px;
+    height: 2rem;
 }
 
 header .title h1{
     margin: inherit;
     text-align: center;
-    padding: 5px;
+    line-height: 2rem;
+    font-size: 2rem;
+}
+
+header .title #about {
+    margin-left: 1rem;
+}
+
+header .title #how-to-play {
+    margin-right: 1rem;
 }
 
 
@@ -38,8 +49,9 @@ header nav ul {
 
 header nav ul#controls {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     width: 100%;
+    justify-items: center;
 }
 
 header nav #nav-numbers {
@@ -119,22 +131,26 @@ header button {
 }
 
 
+.text-button {
+    border: none;
+    color: white;
+}
+
 
 .game--container {
     display: grid;
     width: 80%;
-    max-width: calc();
     grid-template-columns: repeat(4, 1fr);
     margin: auto;
-    row-gap: 30px;
-    column-gap: 5%;
+    row-gap: 1rem;
+    column-gap: 3%;
     transition: 1s;
     z-index: -1;
-}
+  }
 
 .extra-column {
     grid-template-columns: repeat(5, auto);
-    column-gap: 10%;
+    column-gap: 1rem;
 }
 
 
@@ -143,7 +159,7 @@ header button {
     width: 90%;
     grid-template-columns: repeat(3, auto);
     margin: 30px auto;
-    row-gap: 10%;
+    row-gap: 1rem;
     column-gap: 15%;
   }
 
@@ -318,6 +334,15 @@ header button {
         grid-template-columns: repeat(1, 6fr 3fr);
     }
 
+    header .title {
+        height: 1.5rem;
+    }
+
+    header .title h1 {
+        line-height: 1.5rem;
+        font-size: 1.5rem;
+    }
+
     .game--container {
         width: 100%
     }
@@ -340,11 +365,12 @@ header button {
     border-color: #003c54;
     box-shadow: -.65em .65em #003c54;
     outline: #003c54;
-}
+    }
 
     .extra-column {
         grid-template-columns: repeat(3, auto);
         column-gap: 10%;
+        row-gap: .75rem;
     }
 
     .extra-column .card {
@@ -360,12 +386,19 @@ header button {
     .card.Three .shape {
         margin-bottom: -5px;
         margin-top: -5px;
-      }
+    }
 
-      .nav-icon img {
+    .nav-icon img {
         width: 2.5rem;
         height: 2.5rem;
     }
+
+    .dialog-container,
+    .dialog-overlay {
+      top: 1.5rem !important;
+    }
+
+    
 }
 
 @media (max-width: 400px) {
@@ -376,22 +409,24 @@ header button {
 
     header nav ul#numbers li {
         font-size: .9rem;
-    }   
+    }
 }
 
 
-#turn { display:none; }
 
-@media only screen and (orientation:landscape) and (max-width: 400px) {
-    #turn { display:block; }
-    #board { display:none; }
+@media  (max-width: 600px) {
+   .not-on-small {
+    display: none;
+   }
+
+   #color-picker ul {
+    flex-direction: column;
+   }
+
+   #color-picker li {
+    margin-top: .75rem;
+   }
   }
-
-@media only screen and (orientation:portrait) and (max-width: 400px) {
-    #turn { display:none; }
-    #board { display:block; }
-  }
-
 
 
 /**
@@ -401,7 +436,7 @@ header button {
  .dialog-container,
  .dialog-overlay {
    position: fixed; /* 1 */
-   top: 50px; /* 1 */
+   top: 2rem; /* 1 */
    right: 0; /* 1 */
    bottom: 0; /* 1 */
    left: 0; /* 1 */
