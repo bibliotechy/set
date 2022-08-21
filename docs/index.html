@@ -189,20 +189,30 @@
             <ul>
               <li>
                 <label class=sr-only>Color 1:  Initially reddish</label>
-                <input class="color-selector" type="color" value="#EE442F" data-color="Red" data-initial-color="#EE442F" />
-                <button class="color-reset"> Reset </button>
+                <input id="color1" class="color-selector" type="color" value="#EE442F" data-color="Red" data-initial-color="#EE442F" />
+                <button class="text-only"> Reset </button>
               </li>
               <li>
                 <label class=sr-only>Color 2: initially light blue</label>
-                <input class="color-selector" type="color" value="#63ACBE" data-color="Green" data-initial-color="#63ACBE" />
-                <button class="color-reset"> Reset </button>
+                <input id="color2" class="color-selector" type="color" value="#63ACBE" data-color="Green" data-initial-color="#63ACBE" />
+                <button class="text-only"> Reset </button>
               </li>
               <li>
-                <label class=sr-only>Color 3: initially dark purple</label>
-                <input class="color-selector" type="color" value="#601a4a" data-color="Purple" data-initial-color="#601a4a" />
-                <button class="color-reset"> Reset </button>
+                <label for="color3" class=sr-only>Color 3: initially dark purple</label>
+                <input id="color3" class="color-selector" type="color" value="#601a4a" data-color="Purple" data-initial-color="#601a4a" />
+                <button class="text-only"> Reset </button>
               </li>
             </ul>
+            <div class="color-permalink">
+              <label for="permalink">
+                <button class="text-only" id="get-permalink">Link to this color combo</button>
+              </label> 
+              <span id="permalink-value-wrapper">
+              <input type="text" maxlength="250" name="permalink" id="permalink" />
+              <button class="text-only" id="c2c">Copy to clipboard</button>
+            </span>
+
+            </div>
           </div>
         </div>
       </div>

@@ -285,12 +285,39 @@ const _applyColorSelection = function (colorSelector: HTMLInputElement) {
     var colorStyle = document.getElementById("colorStyle");
     colorStyle.append("." + color +".Solid { fill: " + hex+ "} ." + color + "{stroke: "  + hex +  "}");
     document.getElementById("shaded-"+ color +"-path").setAttribute("style","stroke:" + hex +"; stroke-width:1")
+    handleGetPermalink()
 }
 
 const handleResetColor = function(event: Event) {
     const colorInput = (event.target  as HTMLInputElement).previousElementSibling as HTMLInputElement;
     colorInput.value = colorInput.dataset["initialColor"];
     _applyColorSelection(colorInput)
+}
+
+
+const handleGetPermalink = function() {
+    const color1 = (document.querySelector("#color1") as HTMLInputElement).value.slice(1)
+    const color2 = (document.querySelector("#color2") as HTMLInputElement).value.slice(1)
+    const color3 = (document.querySelector("#color3") as HTMLInputElement).value.slice(1)
+    const url = `${window.location.origin}${window.location.pathname}?c1=${color1}&c2=${color2}&c3=${color3}`
+    const input =  (document.querySelector("#permalink") as HTMLInputElement)
+    input.value = url
+    input.parentElement.classList.add("show")
+}
+
+const handlePermalinkCopyToClipboard = function () {
+    const input =  (document.querySelector("#permalink") as HTMLInputElement)
+    if (window.navigator.clipboard) {
+        window.navigator.clipboard.writeText(input.value)
+        input.nextElementSibling.classList.add("success")
+    }
+    else {
+        input.nextElementSibling.classList.add("failure")
+    }
+    setTimeout(() => {
+        input.nextElementSibling.classList.remove("failure")
+        input.nextElementSibling.classList.remove("success")
+    }, 5000)
 }
 
 interface IParamMap {
@@ -428,12 +455,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 function handleDialogClose(event: Event) {
     (document.querySelector(".game--container button:nth-of-type(1)") as HTMLElement).focus()
 }
-function handleDialogOpen(selector: string) {
-    (document.getElementById(selector) as HTMLElement).blur()
-}
 
 document.querySelector('.game--restart').addEventListener('click', handleRestartGame);
 document.querySelector('#check-for-sets').addEventListener('click', handleCheckForAnySets);
 document.querySelector('#add-column').addEventListener('click', handleAddThreeCards);
 document.querySelectorAll(".color-selector").forEach((el) => el.addEventListener("input", handleColorChange));
 document.querySelectorAll(".color-reset").forEach((el) => el.addEventListener("click", handleResetColor));
+document.querySelector('#get-permalink').addEventListener('click', handleGetPermalink);
+document.querySelector("#c2c").addEventListener("click", handlePermalinkCopyToClipboard)
