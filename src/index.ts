@@ -290,6 +290,7 @@ const _applyColorSelection = function (colorSelector: HTMLInputElement) {
 
 const handleResetColor = function(event: Event) {
     const colorInput = (event.target  as HTMLInputElement).previousElementSibling as HTMLInputElement;
+    debugger
     colorInput.value = colorInput.dataset["initialColor"];
     _applyColorSelection(colorInput)
 }
@@ -333,7 +334,6 @@ const handleColorUrlParams = function () {
             [k, v] = param.split("=")
             pmap[k] = v
         })
-        console.log(pmap)
         if (pmap.c1) { setColorOne(pmap.c1)}
         if (pmap.c2) { setColorTwo(pmap.c2)}
         if (pmap.c3) { setColorThree(pmap.c3)}
@@ -345,6 +345,7 @@ const setColorOne = function(color: string) {
     if (isHexColor(color)) {
         const el = document.querySelector('[data-color="Red"]') as HTMLInputElement;
         el.value = `#${color}`
+        el.dataset.initialColor = `#${color}`
         _applyColorSelection(el)
     }
 }
@@ -353,6 +354,7 @@ const setColorTwo = function (color: string) {
     if (isHexColor(color)) {
         const el = document.querySelector('[data-color="Green"]') as HTMLInputElement;
         el.value = `#${color}`
+        el.dataset.initialColor = `#${color}`
         _applyColorSelection(el)
     }
 }
@@ -361,6 +363,7 @@ const setColorThree = function(color: string) {
     if (isHexColor(color)) {
         const el = document.querySelector('[data-color="Purple"]') as HTMLInputElement;
         el.value = `#${color}`
+        el.dataset.initialColor = `#${color}`
         _applyColorSelection(el)
     }
 }
@@ -460,6 +463,6 @@ document.querySelector('.game--restart').addEventListener('click', handleRestart
 document.querySelector('#check-for-sets').addEventListener('click', handleCheckForAnySets);
 document.querySelector('#add-column').addEventListener('click', handleAddThreeCards);
 document.querySelectorAll(".color-selector").forEach((el) => el.addEventListener("input", handleColorChange));
-document.querySelectorAll(".color-reset").forEach((el) => el.addEventListener("click", handleResetColor));
+document.querySelectorAll(".reset").forEach((el) => el.addEventListener("click", handleResetColor));
 document.querySelector('#get-permalink').addEventListener('click', handleGetPermalink);
 document.querySelector("#c2c").addEventListener("click", handlePermalinkCopyToClipboard)
