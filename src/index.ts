@@ -1,6 +1,6 @@
 import A11yDialog from 'a11y-dialog'
 import { Color,Shape, Fill, Count} from "./attributes"
-import { Card } from './card';
+import { Card, CardElement} from './card';
 import { Stack} from "./stack"
 import { Checker} from "./checker"
 import {shapeSVG} from "./svg"
@@ -90,7 +90,7 @@ const drawCard = function(card: Card, position: string): HTMLElement {
 
     let spot: number = +position;
 
-    let cardButton = document.createElement("button")
+    let cardButton: CardElement = document.createElement("button")
     cardButton.classList.add("card")
     cardButton.classList.add("hidden")
     cardButton.classList.add(card.count)
@@ -109,6 +109,8 @@ const drawCard = function(card: Card, position: string): HTMLElement {
         if (card.fill == Fill.Shaded) {
             throwShade(card.color, shape as HTMLElement)
         }})
+    cardButton.card = card
+    
 
     return cardButton
 }
@@ -179,8 +181,13 @@ const removeAllCards = function(): void {
 }
 
 
+interface Cell extends HTMLDivElement {
+    dataset: {
+        cellIndex?: string;
+    }
+}
+
 const pushCardsBack = function(): void {
-    //debugger
     let extras = [12, 13, 14]
         .map((n) => document.querySelector("[data-cell-index='" + n +  "']"))
     const empty_extras = extras.filter((node) => node.classList?.contains("empty"))
@@ -196,14 +203,17 @@ const pushCardsBack = function(): void {
     for (let i = 0; i < 12; i++) {
         let node = document.querySelector("[data-cell-index='" + i+  "']")
         if (node.classList?.contains("empty")) {
-            let last = extras.pop()
+            let last = extras.pop() as Cell
             node.classList.remove("empty")
             node.innerHTML = last.innerHTML
-            let card = node.querySelector("button.card")
+            let card = node.querySelector("button.card") as CardElement;
+            board[i] = board[parseInt(last.dataset.cellIndex)]
+            board[parseInt(last.dataset.cellIndex)] = undefined;
             card.setAttribute("position", String(i+1))
             last.parentElement.removeChild(last)
         }
     }
+    board = board.filter((c)=> c!== undefined)
     document.querySelector(".game--container").classList.remove("extra-column")
     toggleMoreCardsButton()
 }
@@ -221,6 +231,11 @@ const handleAddThreeCards = function(): void{
     toggleMoreCardsButton();
     addCellClickHandlers();
     
+}
+
+const handleAddThreeCardsFromDialog = function() {
+    handleAddThreeCards()
+    document.querySelector("#add-column-from-dialog").remove()
 }
 
 const toggleMoreCardsButton = function(): void {
@@ -250,11 +265,47 @@ const handleRestartGame = function(): void {
 }
 
 const handleCheckForAnySets = function(){
-    let check = Checker.any_sets(board)
-    let text = (check) ? "There is at least one set on the board." : "There are no sets on the board. Add some cards.";
+    const check = Checker.any_sets(board)
+    const text = (check) ? 
+        "At least one set is on the board." : 
+        `There are no sets on the board. <button class="text-only" id="add-column">Add some cards.</button>`;
     const yepNope = document.querySelector("#any-sets")
     yepNope.innerHTML = text
+    document.querySelector('#add-column-from-dialog')?.addEventListener('click', handleAddThreeCardsFromDialog);
+}
 
+const resetCheckForSetsText = function () {
+    const yepNope = document.querySelector("#any-sets")
+    yepNope.innerHTML = ""
+    document.querySelector('#add-column-from-dialog')?.removeEventListener('click', handleAddThreeCards);
+}
+
+const ensureNoCardsSelected = function() {
+    document.querySelectorAll("button.card").forEach((el) => {
+        setTimeout(() => el.classList.remove("selected"), 200)
+    })
+}
+
+const handleRequestForHint = function (event: MouseEvent|KeyboardEvent) {
+    const target = event.target as HTMLInputElement;
+    const n = target.dataset['number'] || "1";
+    let hints = Checker.hint(board, parseInt(n))
+    if (hints.length === 0) {
+        document.querySelector("#no-sets-no-hints").classList.add("show")
+        setTimeout(() => document.querySelector("#no-sets-no-hints").classList.remove("show"), 5000)
+    }
+    checkDialog.hide()
+    ensureNoCardsSelected()
+    setTimeout(() => {
+        hints.forEach((card) => {
+            const el =(document.querySelector(
+                `button.card.${card.count} > svg.${card.shape}.${card.fill}.${card.color}`
+                ).parentElement as HTMLInputElement
+            )
+            el.click()
+            el.focus()
+        })
+    }, 500)
 }
 
 const ensureOnly12Cards = function() {
@@ -404,6 +455,7 @@ const handleCellClick = function(event: MouseEvent | KeyboardEvent| TouchEvent) 
                     setTimeout(() => cardElement.parentElement.removeChild(cardElement), 200)
                     
                 })
+                console.log(board)
                 incrementSetsFound()
                 if (numberOfCards() == 15) {
                     setTimeout(() => pushCardsBack(), 1000)
@@ -425,7 +477,7 @@ const handleCellClick = function(event: MouseEvent | KeyboardEvent| TouchEvent) 
 let stack: Stack;
 let board: Array<Card>;
 let sets_found: number;
-
+let checkDialog: A11yDialog;
 
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -437,8 +489,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     addCellClickHandlers();
 
     document.addEventListener('keydown', keyboardInput);
-    document.addEventListener('touchstart', (event) =>  console.log(event));
-    
     
     const helpDialog   = new A11yDialog(document.getElementById('help-dialog'))
     helpDialog.on("hide", () => handleDialogClose(event))
@@ -446,17 +496,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const colorDialog = new A11yDialog(document.getElementById('color-dialog'))
     colorDialog.on("hide", () => handleDialogClose(event))
    
-    const checkDialog = new A11yDialog(document.getElementById('check-dialog'))
-    checkDialog.on("hide", () => handleDialogClose(event))
+    checkDialog = new A11yDialog(document.getElementById('check-dialog'))
+    checkDialog.on("hide", () => handleCheckDialogClose(event))
 
     const howToDialog = new A11yDialog(document.getElementById('howto-dialog'))
-    checkDialog.on("hide", () => handleDialogClose(event))
+    
    
   })
 
 
 function handleDialogClose(event: Event) {
     (document.querySelector(".game--container button:nth-of-type(1)") as HTMLElement).focus()
+}
+
+const handleCheckDialogClose = function(event: Event) {
+    resetCheckForSetsText()
 }
 
 document.querySelector('.game--restart').addEventListener('click', handleRestartGame);
@@ -466,3 +520,4 @@ document.querySelectorAll(".color-selector").forEach((el) => el.addEventListener
 document.querySelectorAll(".reset").forEach((el) => el.addEventListener("click", handleResetColor));
 document.querySelector('#get-permalink').addEventListener('click', handleGetPermalink);
 document.querySelector("#c2c").addEventListener("click", handlePermalinkCopyToClipboard)
+document.querySelectorAll("#hints button").forEach((el) => el.addEventListener("click", handleRequestForHint));

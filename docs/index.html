@@ -59,20 +59,23 @@
             
           </li>
           <li>
-            <button class="game--restart" aria-pressed="false" title="Restart Game">
+            <button
+              id="add-column"
+              aria-pressed="false"
+              title="Add three more cards to the board"
+            >
               <span class="nav-icon" >
-                <img src="img/restart.png" alt="Paintbrush and can">
+                <img src="img/cards2.png" alt="Three playing cards stacked up" />
               </span>
-              Restart<span class="not-on-small"> Game</span>
+              +3&nbsp;Cards
             </button>
           </li>
           <li>
             <button
-            id="check-for-sets"
             data-a11y-dialog-show="check-dialog"
-            title="Check for sets on the board"
+            title="Get help"
             aria-pressed="false"
-            aria-label="check for sets"
+            aria-label="Help"
             >
               <span class="nav-icon" >
                 <img src="img/check.png" alt="Magnifying glass with check in the middle"/>
@@ -81,14 +84,11 @@
             </button> 
           </li>
           <li>
-            <button
-              id="add-column"
-              aria-pressed="false"
-            >
+            <button class="game--restart" aria-pressed="false" title="Restart Game">
               <span class="nav-icon" >
-                <img src="img/cards2.png" alt="Three playing cards stacked up" />
+                <img src="img/restart.png" alt="Paintbrush and can">
               </span>
-              +3&nbsp;Cards
+              Restart<span class="not-on-small"> Game</span>
             </button>
           </li>
         </ul>
@@ -158,9 +158,6 @@
         <div data-cell-index="11" class="cell empty"></div>
       </div>
     </section>
-
-
-
     <div
       class="dialog-container"
       id="color-dialog"
@@ -176,15 +173,6 @@
         </button>
         <h1 id="color-dialog-title">Pick your own colors</h1>
         <div id="color-picker">
-        <!-- 
-          <h2> Preset color combinations</h2>
-          <div class="preset-colors">
-            <ul>
-              <li><button>Protanopia</button></li>
-              <li><button>Deuteranopia</button></li>
-              <li><button>Tritanopia</button></li>
-            </ul>
-          </div> -->
           <div class="diy-colors">
             <ul>
               <li>
@@ -288,10 +276,20 @@
         <button class="dialog-close" type="button" data-a11y-dialog-hide aria-label="Close dialog">
           &times;
         </button>
-        <h1 id="color-dialog-title">Are there any sets on the board?</h1>
+        <h2>Help</h2>
         <div id="color-picker">
+          <h3 id="color-dialog-title">Are there any sets on the board?</h3>
           <div>
-            <p id="any-sets"></p>
+            <button id="check-for-sets">Check Now</button> <span id="any-sets"></span>
+          </div>
+          <h3>Give me a hint</h3>
+          <div id="hints">
+            <small>Highlight one or two cards in a set on the board</small>
+            <div id="hint-buttons">
+              <button data-number="1"> Show 1 card</button>
+              <button data-number="2"> Show 2 cards</button>
+              <p id="no-sets-no-hints">Oops. There aren't any sets on the board, so I can't give a hint.</p>
+            </div>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { Card } from "./card"
 import { Color, Shape, Count, Fill } from "./attributes"
+import arrayShuffle from "array-shuffle"
 
 class Checker{
     
@@ -34,6 +35,29 @@ class Checker{
             }
         }
         return false
+    }
+
+
+    static hint(_cards: Card[], numberOfCardsToHint = 1): Card[] {
+        const cards = arrayShuffle(_cards)
+        if (cards.length < 3) {
+            throw(RangeError("Not enough cards to check for a set"))
+        }
+        for(let first = 0; cards.length -2 > first; first++) {
+            for (let second = first + 1; cards.length -1 > second; second++ ){
+                for (let third = second + 1; cards.length > third; third++) {
+                    if (Checker.is_set([cards[first], cards[second], cards[third]])) {
+                        if (numberOfCardsToHint == 2) {
+                            return [cards[first], cards[second]]
+                        }
+                        else {
+                            return [cards[first]]
+                        }
+                    }
+                }
+            }
+        }
+        return []
     }
 }
 

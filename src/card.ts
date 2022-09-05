@@ -46,8 +46,11 @@ const randomEnum = (enumeration: any) => {
     return enumeration[enumKey];
 }
 
+interface CardElement extends HTMLButtonElement {
+    card?: Card;
+}
 
 
 
-export { Card }
+export { Card, CardElement }
 
